@@ -11,7 +11,13 @@ declare global {
 }
 
 export class AuthMiddleware {
-  handle(req: Request, res: Response, next: NextFunction) {
+  validateToken(req: Request, res: Response, next: NextFunction) {
+    
+    const publicRoutes = ['/api/users/login'];
+    if (publicRoutes.includes(req.path)) {
+      return next();
+    }
+
     const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {

@@ -1,4 +1,4 @@
-import { UserRoleEnum } from '../enum/userRole';
+import { UserRoleEnum } from "../../../../shared/domain/enum/userRole";
 
 export class User {
     id: string;

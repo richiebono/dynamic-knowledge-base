@@ -33,7 +33,7 @@ export class App {
 
     private initializeMiddlewares() {
         this.app.use(express.json());
-        this.app.use(this.authMiddleware.handle);       
+        this.app.use(this.authMiddleware.validateToken);       
     }
 
     private initializeRoutes() {
