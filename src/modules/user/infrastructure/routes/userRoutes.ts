@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { injectable, inject } from 'inversify';
 import { UserController } from '../controllers/userController';
 import { UserValidationMiddleware } from '../middleware/userValidation';
+import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
 
 @injectable()
 export class UserRoutes {
@@ -16,6 +18,8 @@ export class UserRoutes {
     }
 
     private initializeRoutes() {
+        const authMiddleware = new AuthMiddleware();
+
         /**
          * @swagger
          * /users:
@@ -39,6 +43,7 @@ export class UserRoutes {
          */
         this.router.post(
             '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.userValidationMiddleware.validateCreateUser.bind(this.userValidationMiddleware),
             this.userController.createUser.bind(this.userController)
         );
@@ -72,6 +77,7 @@ export class UserRoutes {
          */
         this.router.put(
             '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.userValidationMiddleware.validateUpdateUser.bind(this.userValidationMiddleware),
             this.userController.updateUser.bind(this.userController)
         );
@@ -92,7 +98,11 @@ export class UserRoutes {
          *       200:
          *         description: User retrieved successfully
          */
-        this.router.get('/:id', this.userController.getUserById.bind(this.userController));
+        this.router.get(
+            '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.userController.getUserById.bind(this.userController)
+        );
 
         /**
          * @swagger
@@ -104,7 +114,13 @@ export class UserRoutes {
          *       200:
          *         description: List of users
          */
-        this.router.get('/', this.userController.getAllUsers.bind(this.userController));
+        this.router.get(
+            '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
+            this.userController.getAllUsers.bind(this.userController)
+        );
+
+        this.router.post('/login', this.userController.login.bind(this.userController));
     }
 
     public getRouter(): Router {

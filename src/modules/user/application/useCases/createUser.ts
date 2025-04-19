@@ -1,27 +1,25 @@
 import { inject, injectable } from 'inversify';
-import { v4 as uuidv4 } from 'uuid';
 import { IUserRepository } from '../../domain/interfaces/userRepository';
 import { CreateUserDTO } from '../DTOs/userDTO';
 import { User } from '../../domain/entities/user';
-import { UserRoleEnum } from '../../domain/enum/userRole';
+import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
 
 @injectable()
 export class CreateUser {
-    private userRepository: IUserRepository;
+    constructor(@inject('IUserRepository') private userRepository: IUserRepository) {}
 
-    constructor(@inject('IUserRepository') userRepository: IUserRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public async execute(userData: CreateUserDTO): Promise<User> {
+    async execute(createUserDTO: CreateUserDTO): Promise<void> {
+        const hashedPassword = await bcrypt.hash(createUserDTO.password, 10);
         const user = new User({
             id: uuidv4(),
-            name: userData.name,
-            email: userData.email,
-            role: userData.role as UserRoleEnum,
+            name: createUserDTO.name,
+            email: createUserDTO.email,
+            role: createUserDTO.role as UserRoleEnum,
+            password: hashedPassword,
             createdAt: new Date(),
         });
-
-        return await this.userRepository.create(user);
+        await this.userRepository.create(user);
     }
 }

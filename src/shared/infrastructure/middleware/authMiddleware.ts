@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { UserRoleEnum } from '../../../shared/domain/enum/userRole';
 
 declare global {
   namespace Express {
     interface Request {
-      user: any;
+      user: { id: string; role: UserRoleEnum } | null;
     }
   }
 }
@@ -22,8 +23,17 @@ export class AuthMiddleware {
         return res.status(403).json({ message: 'Failed to authenticate token' });
       }
 
-      req.user = decoded;
+      req.user = decoded as { id: string; role: UserRoleEnum };
       next();
     });
+  }
+
+  checkPermissions(requiredRole: UserRoleEnum) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      if (!req.user || req.user.role !== requiredRole) {
+        return res.status(403).json({ message: 'Insufficient permissions' });
+      }
+      next();
+    };
   }
 }

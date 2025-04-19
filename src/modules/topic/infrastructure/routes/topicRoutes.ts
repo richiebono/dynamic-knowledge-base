@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { TopicController } from '../controllers/topicController';
 import { TopicValidationMiddleware } from '../middleware/topicValidation';
+import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+
 
 export class TopicRoutes {
     private router: Router;
@@ -14,6 +17,8 @@ export class TopicRoutes {
     }
 
     private initializeRoutes() {
+        const authMiddleware = new AuthMiddleware();
+
         /**
          * @swagger
          * /topics:
@@ -37,6 +42,7 @@ export class TopicRoutes {
          */
         this.router.post(
             '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.topicValidationMiddleware.validateCreateTopic.bind(this.topicValidationMiddleware),
             this.topicController.createTopic.bind(this.topicController)
         );
@@ -70,6 +76,7 @@ export class TopicRoutes {
          */
         this.router.put(
             '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.topicValidationMiddleware.validateUpdateTopic.bind(this.topicValidationMiddleware),
             this.topicController.updateTopic.bind(this.topicController)
         );
@@ -90,7 +97,11 @@ export class TopicRoutes {
          *       200:
          *         description: Topic retrieved successfully
          */
-        this.router.get('/:id', this.topicController.getTopicById.bind(this.topicController));
+        this.router.get(
+            '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer), // Usuários autenticados podem acessar detalhes de tópicos
+            this.topicController.getTopicById.bind(this.topicController)
+        );
 
         /**
          * @swagger
@@ -108,7 +119,11 @@ export class TopicRoutes {
          *       200:
          *         description: Topic tree retrieved successfully
          */
-        this.router.get('/tree/:id', this.topicController.getTopicTree.bind(this.topicController));
+        this.router.get(
+            '/tree/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.topicController.getTopicTree.bind(this.topicController)
+        );
 
         /**
          * @swagger
@@ -133,6 +148,7 @@ export class TopicRoutes {
          */
         this.router.get(
             '/shortest-path/:startId/:endId',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
             this.topicController.findShortestPath.bind(this.topicController)
         );
     }

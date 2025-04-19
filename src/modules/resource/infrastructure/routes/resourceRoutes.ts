@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { injectable, inject } from 'inversify';
 import { ResourceController } from '../controllers/resourceController';
 import { ResourceValidationMiddleware } from '../middleware/resourceValidation';
+import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
 
 @injectable()
 export class ResourceRoutes {
@@ -16,6 +18,8 @@ export class ResourceRoutes {
     }
 
     private initializeRoutes() {
+        const authMiddleware = new AuthMiddleware();
+
         /**
          * @swagger
          * /resources:
@@ -39,6 +43,7 @@ export class ResourceRoutes {
          */
         this.router.post(
             '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin), 
             this.resourceValidationMiddleware.validateCreateResource.bind(this.resourceValidationMiddleware),
             this.resourceController.createResource.bind(this.resourceController)
         );
@@ -72,6 +77,7 @@ export class ResourceRoutes {
          */
         this.router.put(
             '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.resourceValidationMiddleware.validateUpdateResource.bind(this.resourceValidationMiddleware),
             this.resourceController.updateResource.bind(this.resourceController)
         );
@@ -92,7 +98,11 @@ export class ResourceRoutes {
          *       200:
          *         description: Resource retrieved successfully
          */
-        this.router.get('/:id', this.resourceController.getResource.bind(this.resourceController));
+        this.router.get(
+            '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.resourceController.getResource.bind(this.resourceController)
+        );
 
         /**
          * @swagger
@@ -110,7 +120,11 @@ export class ResourceRoutes {
          *       200:
          *         description: List of resources for the topic
          */
-        this.router.get('/topic/:topicId', this.resourceController.getResourcesByTopicId.bind(this.resourceController));
+        this.router.get(
+            '/topic/:topicId',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer), 
+            this.resourceController.getResourcesByTopicId.bind(this.resourceController)
+        );
 
         /**
          * @swagger
@@ -128,7 +142,11 @@ export class ResourceRoutes {
          *       200:
          *         description: Resource deleted successfully
          */
-        this.router.delete('/:id', this.resourceController.deleteResource.bind(this.resourceController));
+        this.router.delete(
+            '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
+            this.resourceController.deleteResource.bind(this.resourceController)
+        );
     }
 
     public getRouter(): Router {
