@@ -7,11 +7,11 @@ export abstract class DbConnection {
 
     protected constructor() {
         this.pool = new Pool({
-            user: ENV.DATABASE_URL.split(':')[1]?.replace('//', '') || '',
-            host: ENV.DATABASE_URL.split('@')[1]?.split(':')[0] || '',
-            database: ENV.DATABASE_URL.split('/').pop() || '',
-            password: ENV.DATABASE_URL.split(':')[2]?.split('@')[0] || '',
-            port: parseInt(ENV.DATABASE_URL.split(':')[3]?.split('/')[0] || '5432', 10),
+            user: ENV.POSTGRES.USER,
+            host: ENV.POSTGRES.HOST,
+            database: ENV.POSTGRES.DATABASE,
+            password: ENV.POSTGRES.PASSWORD,
+            port: ENV.POSTGRES.PORT,
         });
     }
 
