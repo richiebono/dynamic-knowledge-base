@@ -1,12 +1,12 @@
 import { injectable, inject } from 'inversify';
 import { User } from '../../domain/entities/user';
 import { IUserRepository } from '../../domain/interfaces/userRepository';
-import { DbConnection } from '../../../../shared/infrastructure/database/dbConnection';
 import { UserRoleEnum } from '../../domain/enum/userRole';
+import { UserDbConnection } from '../database/userDbConnection';
 
 @injectable()
 export class UserRepository implements IUserRepository {
-    constructor(@inject(DbConnection) private dbConnection: DbConnection) {}
+    constructor(@inject(UserDbConnection) private dbConnection: UserDbConnection) {}
 
     async create(user: User): Promise<User> {
         const result = await this.dbConnection.query<{ id: string; name: string; email: string; role: string; createdAt: Date }>(

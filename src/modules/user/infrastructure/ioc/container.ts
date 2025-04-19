@@ -14,13 +14,14 @@ import { UserController } from '../controllers/userController';
 import { UserValidationMiddleware } from '../middleware/userValidation';
 import { UserRepository } from '../repository/userRepository';
 import { UserRoutes } from '../routes/userRoutes';
-import { DbConnection } from 'shared/infrastructure/database/dbConnection';
+import { UserDbConnection } from '../database/userDbConnection';
+import { DbConnection } from '../../../../shared/infrastructure/database/dbConnection';
 
 const userContainer = new ContainerModule((bind: interfaces.Bind, unbind: interfaces.Unbind, isBound: interfaces.IsBound, rebind: interfaces.Rebind) => {
-    // Use the shared DbConnectionFactory to create a module-specific instance
-    bind<DbConnection>(DbConnection).toDynamicValue((context) => {
-        const dbConnectionFactory = context.container.get<() => DbConnection>('DbConnectionFactory');
-        return dbConnectionFactory();
+    // Use UserDbConnection for the user module
+    bind<UserDbConnection>(UserDbConnection).toDynamicValue(() => {
+        UserDbConnection.initializeInstance();
+        return DbConnection.getInstance() as UserDbConnection;
     });
     
     // Bind repositories

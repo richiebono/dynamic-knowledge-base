@@ -8,9 +8,10 @@ import { ResourceDbConnection } from '../database/resourceDbConnection';
 import { ResourceRepository } from '../repository/resourceRepository';
 
 const resourceContainer = new ContainerModule((bind: interfaces.Bind) => {
-    bind<DbConnection>(DbConnection).toDynamicValue((context) => {
-        const dbConnectionFactory = context.container.get<() => DbConnection>('DbConnectionFactory');
-        return dbConnectionFactory();
+    // Use ResourceDbConnection for the resource module
+    bind<ResourceDbConnection>(ResourceDbConnection).toDynamicValue(() => {
+        ResourceDbConnection.initializeInstance();
+        return DbConnection.getInstance() as ResourceDbConnection;
     });
 
     // Bind repositories
