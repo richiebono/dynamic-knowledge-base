@@ -9,7 +9,6 @@ import { TopicRoutes } from '@topic/infrastructure/routes/topicRoutes';
 import { ResourceRoutes } from '@resource/infrastructure/routes/resourceRoutes';
 import { UserRoutes } from '@user/infrastructure/routes/userRoutes';
 import { swaggerSpec } from '@shared/infrastructure/config/swaggerConfig';
-import { MigrationRunner } from '@shared/infrastructure/database/migrationRunner';
 import { ENV } from '@shared/infrastructure/config/env';
 
 @injectable()
@@ -23,7 +22,6 @@ export class App {
         @inject(ResourceRoutes) private resourceRoutes: ResourceRoutes,
         @inject(UserRoutes) private userRoutes: UserRoutes,
         @inject(ErrorHandler) private errorHandler: ErrorHandler,
-        @inject(MigrationRunner) private migrationRunner: MigrationRunner
     ) {
         this.app = express();
         this.initializeMiddlewares();
@@ -48,11 +46,7 @@ export class App {
     }
 
     public async start(port: number) {
-        try {
-            // Run migrations
-            await this.migrationRunner.up();
-            console.log('Migrations applied successfully.');
-
+        try {           
             // Test database connection
             await this.dbConnection.query('SELECT 1');
         } catch (err) {

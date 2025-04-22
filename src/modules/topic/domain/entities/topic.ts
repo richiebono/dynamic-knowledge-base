@@ -39,13 +39,19 @@ export class Topic {
         content,
         parentTopicId,
     }: {
-        name: string;
-        content: string;
+        name?: string;
+        content?: string;
         parentTopicId?: string;
     }) {
-        this.content = content;
-        this.name = name;
-        this.parentTopicId = parentTopicId;
+        if (typeof name !== 'undefined') {
+            this.name = name;
+        }
+        if (typeof content !== 'undefined') {
+            this.content = content;
+        }
+        if (typeof parentTopicId !== 'undefined') {
+            this.parentTopicId = parentTopicId;
+        }
         this.updatedAt = new Date();
         this.version += 1;
     }

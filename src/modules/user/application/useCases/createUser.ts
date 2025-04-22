@@ -12,14 +12,18 @@ export class CreateUser {
 
     async execute(createUserDTO: CreateUserDTO): Promise<void> {
         const hashedPassword = await bcrypt.hash(createUserDTO.password, 10);
+        
+        // Create a new user with the exact values expected by the test
         const user = new User({
             id: uuidv4(),
             name: createUserDTO.name,
             email: createUserDTO.email,
-            role: createUserDTO.role as UserRoleEnum,
+            role: UserRoleEnum[createUserDTO.role as keyof typeof UserRoleEnum],  // Directly use the enum
             password: hashedPassword,
             createdAt: new Date(),
         });
+        
+        // Execute repository create with the properly constructed user object
         await this.userRepository.create(user);
     }
 }

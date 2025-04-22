@@ -7,10 +7,12 @@ export class UserValidationMiddleware {
     private createUserSchema = Joi.object({
         name: Joi.string().required().messages({
             'string.empty': 'Name is required',
+            'any.required': 'Name is required',
         }),
         email: Joi.string().email().required().messages({
             'string.email': 'Valid email is required',
             'string.empty': 'Email is required',
+            'any.required': 'Email is required',
         }),
         role: Joi.string()
             .valid('Admin', 'Editor', 'Viewer')
@@ -18,6 +20,7 @@ export class UserValidationMiddleware {
             .messages({
                 'any.only': 'Role must be Admin, Editor, or Viewer',
                 'string.empty': 'Role is required',
+                'any.required': 'Role is required',
             }),
     });
 

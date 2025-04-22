@@ -7,9 +7,11 @@ export class TopicValidationMiddleware {
     private createTopicSchema = Joi.object({
         name: Joi.string().required().messages({
             'string.empty': 'Name is required and must be a string.',
+            'any.required': 'Name is required and must be a string.'
         }),
         content: Joi.string().required().messages({
             'string.empty': 'Content is required and must be a string.',
+            'any.required': 'Content is required and must be a string.'
         }),
         parentTopicId: Joi.number().integer().optional().messages({
             'number.base': 'Parent Topic ID must be an integer.',

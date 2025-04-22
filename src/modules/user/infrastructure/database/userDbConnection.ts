@@ -1,7 +1,7 @@
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 
 export class UserDbConnection extends DbConnection {
-    private constructor() {
+    public constructor() {
         super();
     }
 

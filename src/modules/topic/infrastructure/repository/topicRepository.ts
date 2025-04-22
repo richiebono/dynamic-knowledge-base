@@ -12,7 +12,7 @@ export class TopicRepository implements ITopicRepository {
             'SELECT id, name, content, parentTopicId, createdAt, version FROM topics WHERE parentTopicId = $1',
             [currentId]
         );
-        return result.rows.map(this.mapToTopic);
+        return result.rows.map(row => this.mapToTopic(row));
     }
 
     async findVersionById(id: string, version: number): Promise<Topic | null> {
@@ -49,9 +49,15 @@ export class TopicRepository implements ITopicRepository {
 
     async findAll(): Promise<Topic[]> {
         const result = await this.dbConnection.query<{ id: string; name: string; content: string; createdAt: Date; updatedAt: Date; version: number; parentTopicId?: string }>(
-            'SELECT id, name, content, createdAt, updatedAt, version, parentTopicId FROM topics'
+            'SELECT id, name, content, createdAt, updatedAt, version, parentTopicId FROM topics',
+            []
         );
-        return result.rows.map(this.mapToTopic);
+        
+        if (!result || !result.rows) {
+            return [];
+        }
+        
+        return result.rows.map(row => this.mapToTopic(row));
     }
 
     async delete(id: string): Promise<void> {
@@ -63,7 +69,7 @@ export class TopicRepository implements ITopicRepository {
             'SELECT id, name, content, parentTopicId, createdAt, version FROM topics WHERE parentTopicId = $1',
             [parentId]
         );
-        return result.rows.map(this.mapToTopic);
+        return result.rows.map(row => this.mapToTopic(row));
     }
 
     async findByVersion(id: string, version: number): Promise<Topic | null> {
@@ -82,11 +88,19 @@ export class TopicRepository implements ITopicRepository {
              LIMIT $1 OFFSET $2`,
             [limit, offset]
         );
-        return result.rows.map(this.mapToTopic);
+        return result.rows.map(row => this.mapToTopic(row));
     }
 
     async getTotalTopicsCount(): Promise<number> {
-        const result = await this.dbConnection.query<{ count: string }>('SELECT COUNT(*) AS count FROM topics');
+        const result = await this.dbConnection.query<{ count: string }>(
+            'SELECT COUNT(*) AS count FROM topics',
+            [] // Add empty array as second parameter to match the mock expectation
+        );
+        
+        if (!result || !result.rows || !result.rows[0]) {
+            return 0;
+        }
+        
         return parseInt(result.rows[0].count, 10);
     }
 

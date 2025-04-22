@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
-import { IResourceRepository } from '../../domain/interfaces/resourceRepository';
-import { Resource } from '../../domain/entities/resource';
-import { ResourceDbConnection } from '../database/resourceDbConnection';
+import { IResourceRepository } from '@resource/domain/interfaces/resourceRepository';
+import { Resource } from '@resource/domain/entities/resource';
+import { ResourceDbConnection } from '@resource/infrastructure/database/resourceDbConnection';
 
 @injectable()
 export class ResourceRepository implements IResourceRepository {

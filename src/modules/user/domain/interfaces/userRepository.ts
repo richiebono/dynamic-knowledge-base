@@ -1,7 +1,7 @@
 import { User } from '@user/domain/entities/user';
 
 export interface IUserRepository {
-    getTotalUsersCount(): number | PromiseLike<number>;
+    getTotalUsersCount(): Promise<number>;
     findByEmail(email: string): Promise<User | null>;
     create(user: User): Promise<User>;
     update(user: User): Promise<User>;

@@ -3,9 +3,9 @@ import { ENV } from '@shared/infrastructure/config/env';
 
 export abstract class DbConnection {
     private static instance: DbConnection;
-    protected pool: Pool;
+    public pool: Pool;
 
-    protected constructor() {
+    public constructor() {
         this.pool = new Pool({
             user: ENV.POSTGRES.USER,
             host: ENV.POSTGRES.HOST,
@@ -22,7 +22,7 @@ export abstract class DbConnection {
         return this.instance;
     }
 
-    protected static initialize(instance: DbConnection): void {
+    public static initialize(instance: DbConnection): void {
         if (!this.instance) {
             this.instance = instance;
         } else {

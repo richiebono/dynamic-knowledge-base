@@ -1,7 +1,5 @@
 import { Pool } from 'pg';
-import { injectable } from 'inversify';
 
-@injectable()
 export class MigrationRunner {
     constructor(private pool: Pool) {}
 
