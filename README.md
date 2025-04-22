@@ -33,12 +33,6 @@ knowledge-base-backend
 └── tsconfig.json
 ```
 
-## Features
-- **Dynamic Knowledge Base**: Manage topics and resources with relationships and version control.
-- **User Roles and Permissions**: Secure access to resources based on user roles.
-- **Swagger Documentation**: Automatically generated API documentation.
-- **Cloud Integration**: Deployable to Google Cloud Run with Cloud SQL for database management.
-
 ## Setup Instructions
 
 ### Prerequisites
@@ -137,6 +131,12 @@ To enable the CI/CD pipeline, you need to configure the following secrets in you
 5. **`GCP_PROJECT_ID`**: Your Google Cloud project ID.
    - Add your project ID as a secret named `GCP_PROJECT_ID`.
 
+6. **`SERVICE_NAME`**: Name of the Cloud Run service.
+   - Add your service name as a secret named `SERVICE_NAME`.
+
+7. **`REGION`**: Region where Cloud Run will be deployed.
+   - Add your region (e.g., `us-central1`) as a secret named `REGION`.
+
 ### Adding Secrets to GitHub
 1. Go to your GitHub repository.
 2. Navigate to **Settings** > **Secrets and variables** > **Actions**.
@@ -144,6 +144,44 @@ To enable the CI/CD pipeline, you need to configure the following secrets in you
 4. Add each secret with its respective name and value.
 
 Once the secrets are configured, the GitHub Actions workflow will use them to authenticate and execute the CI/CD pipeline.
+
+## Environment Variables
+
+Make sure to configure the following environment variables in the `.env` file:
+
+### Database
+- `POSTGRES_USER`: Database user.
+- `POSTGRES_PASSWORD`: Database password.
+- `POSTGRES_HOST`: Database host.
+- `POSTGRES_PORT`: Database port.
+- `POSTGRES_DATABASE`: Database name.
+
+### Server Configuration
+- `PORT`: Port where the server will run.
+- `SWAGGER_BASE_URL`: Base URL for accessing Swagger documentation.
+- `JWT_SECRET`: Secret key for generating JWT tokens.
+- `JWT_EXPIRES_IN`: Expiration time for JWT tokens.
+
+### Google Cloud Platform
+- `GCP_PROJECT_ID`: Google Cloud project ID.
+- `SERVICE_NAME`: Cloud Run service name.
+
+### Cloud SQL
+- `REGION`: Region where Cloud SQL will be created.
+- `TIER`: Cloud SQL instance type.
+- `DATABASE_VERSION`: Cloud SQL database version.
+
+## GitHub Secrets
+
+Make sure to configure the following secrets in your GitHub repository:
+
+- `ENV`: Base64-encoded `.env` file.
+- `GCP_SERVICE_ACCOUNT_KEY`: Base64-encoded Google Cloud service account key.
+- `SONAR_TOKEN`: Authentication token for SonarQube.
+- `SONAR_HOST_URL`: SonarQube server URL.
+- `GCP_PROJECT_ID`: Google Cloud project ID.
+- `SERVICE_NAME`: Cloud Run service name.
+- `REGION`: Region where Cloud Run will be deployed.
 
 ## Contributing
 Contributions are welcome! Please follow these steps:
