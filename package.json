@@ -8,7 +8,8 @@
     "build": "tsc",
     "migrate": "sh infra/scripts/migrate.sh",
     "test": "jest",
-    "start:dev": "ts-node src/server.ts"
+    "start:dev": "ts-node src/server.ts",
+    "scripts:chmod": "chmod +x infra/scripts/*.sh"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
