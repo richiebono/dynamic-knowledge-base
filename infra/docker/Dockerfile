@@ -1,36 +1,48 @@
-# Stage 1: Build
-FROM node:16-alpine AS builder
+FROM node:23-slim AS builder
 
-# Set the working directory inside the container
-WORKDIR /app
+LABEL maintainer="richiebono@gmail.com"
+LABEL version="1.0.0"
 
-# Copy package.json and package-lock.json to the working directory
+WORKDIR /usr/src/app
+
+# Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
-# Install dependencies
+# Install all dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy source code
 COPY . .
 
-# Build the TypeScript code
+# Build the application
 RUN npm run build
 
-# Stage 2: Production
-FROM node:16-alpine
+# Production stage
+FROM node:23-slim
 
-# Set the working directory inside the container
-WORKDIR /app
+LABEL maintainer="richiebono@gmail.com"
+LABEL version="1.0.0"
 
-# Copy only the necessary files from the build stage
+WORKDIR /usr/src/app
+
+# Copy package files and configs
 COPY package*.json ./
-COPY --from=builder /app/dist ./dist
+COPY tsconfig.json ./
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm ci --only=production
 
-# Expose the application port
-EXPOSE 3000
+# Copy built files from builder stage
+COPY --from=builder /usr/src/app/dist ./dist
 
-# Define the command to run the application
-CMD ["node", "dist/server.js"]
+# Copy .env file
+COPY .env ./
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
+# Use node to run the compiled JavaScript
+CMD ["npm", "start"]
