@@ -14,7 +14,6 @@ jest.mock('@shared/infrastructure/database/dbConnection', () => {
 
 describe('TopicDbConnection', () => {
   beforeEach(() => {
-    // Reset mocks before each test
     jest.resetAllMocks();
   });
 

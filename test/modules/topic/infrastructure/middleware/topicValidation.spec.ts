@@ -15,7 +15,6 @@ describe('TopicValidationMiddleware', () => {
     res = mock<Response>();
     next = jest.fn();
 
-    // Fix method chaining by using instance(res) instead of res
     when(res.status(anything())).thenReturn(instance(res));
     when(res.json(anything())).thenReturn(instance(res) as any);
   });

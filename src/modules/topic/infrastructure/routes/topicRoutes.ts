@@ -99,7 +99,7 @@ export class TopicRoutes {
          */
         this.router.get(
             '/:id',
-            authMiddleware.checkPermissions(UserRoleEnum.Viewer), // Usuários autenticados podem acessar detalhes de tópicos
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
             this.topicController.getTopicById.bind(this.topicController)
         );
 

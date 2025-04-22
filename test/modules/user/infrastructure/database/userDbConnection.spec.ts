@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { UserDbConnection } from '@user/infrastructure/database/userDbConnection';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 
-// Mock only the static methods, not the class itself
 jest.spyOn(DbConnection, 'getInstance').mockImplementation(jest.fn());
 jest.spyOn(DbConnection, 'initialize').mockImplementation(jest.fn());
 

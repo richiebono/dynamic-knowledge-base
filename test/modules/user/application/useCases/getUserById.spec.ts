@@ -52,8 +52,6 @@ describe('GetUserById', () => {
     expect(result?.email).toBe(mockUser.email);
     expect(result?.role).toBe(UserRoleEnum.Viewer.toString());
     expect(result?.createdAt).toBe(mockUser.createdAt);
-    
-    // Password should not be included in the DTO
     expect(result).not.toHaveProperty('password');
   });
 });

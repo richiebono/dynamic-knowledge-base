@@ -18,8 +18,6 @@ describe('UserValidationMiddleware', () => {
     reqInstance = instance(req);
     resInstance = instance(res);
     next = jest.fn();
-
-    // Properly set up chaining for res.status().json()
     when(res.status(anything())).thenReturn(resInstance);
     when(res.json(anything())).thenReturn(resInstance as any);
   });

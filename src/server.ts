@@ -1,4 +1,4 @@
-import 'reflect-metadata'; // Required for inversify
+import 'reflect-metadata';
 import { container } from '@shared/infrastructure/ioc/container';
 import { App } from './app';
 import { ENV } from '@shared/infrastructure/config/env';

@@ -19,8 +19,10 @@ describe('DeleteUser', () => {
     const userId = 'non-existent-id';
     when(userRepository.findById(userId)).thenResolve(null);
     
-    // Act & Assert
+    // Act
     await expect(deleteUser.execute(userId)).rejects.toThrow('User not found');
+
+    // Assert
     verify(userRepository.findById(userId)).once();
     verify(userRepository.delete(userId)).never();
   });

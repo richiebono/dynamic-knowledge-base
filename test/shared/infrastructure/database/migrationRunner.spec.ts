@@ -19,7 +19,6 @@ describe('MigrationRunner', () => {
     
     migrationRunner = new MigrationRunner(mockPool);
     
-    // Spy on console.log to suppress output with explicit typing
     jest.spyOn(console, 'log').mockImplementation((..._args: any[]) => {});
     jest.spyOn(console, 'error').mockImplementation((..._args: any[]) => {});
   });
@@ -35,10 +34,9 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(3); // 3 CREATE TABLE queries
+      expect(mockClient.query).toHaveBeenCalledTimes(3);
       expect(mockClient.release).toHaveBeenCalled();
       
-      // Check that each table creation query was executed
       const calls = mockClient.query.mock.calls;
       expect(calls[0][0]).toContain('CREATE TABLE IF NOT EXISTS users');
       expect(calls[1][0]).toContain('CREATE TABLE IF NOT EXISTS topics');
@@ -64,10 +62,9 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(3); // 3 DROP TABLE queries
+      expect(mockClient.query).toHaveBeenCalledTimes(3);
       expect(mockClient.release).toHaveBeenCalled();
       
-      // Check that each table drop query was executed in reverse order
       const calls = mockClient.query.mock.calls;
       expect(calls[0][0]).toContain('DROP TABLE IF EXISTS resources');
       expect(calls[1][0]).toContain('DROP TABLE IF EXISTS topics');

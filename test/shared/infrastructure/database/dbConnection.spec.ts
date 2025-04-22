@@ -2,7 +2,6 @@ import { Pool, PoolClient, QueryResult } from 'pg';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 import { ENV } from '@shared/infrastructure/config/env';
 
-// Create a concrete implementation for testing the abstract class
 class TestDbConnection extends DbConnection {
   constructor() {
     super();
@@ -36,10 +35,8 @@ describe('DbConnection', () => {
   let mockPool: jest.Mocked<Pool>;
   
   beforeEach(() => {
-    // Reset static instance between tests
     (DbConnection as any).instance = undefined;
     
-    // Create a new instance
     dbConnection = new TestDbConnection();
     mockPool = dbConnection.pool as jest.Mocked<Pool>;
   });

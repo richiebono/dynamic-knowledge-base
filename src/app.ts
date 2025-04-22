@@ -1,4 +1,4 @@
-import 'reflect-metadata'; // Required for inversify
+import 'reflect-metadata';
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { inject, injectable } from 'inversify';
@@ -47,7 +47,6 @@ export class App {
 
     public async start(port: number) {
         try {           
-            // Test database connection
             await this.dbConnection.query('SELECT 1');
         } catch (err) {
             console.error('Database setup failed:', err);

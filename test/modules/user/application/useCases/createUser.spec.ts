@@ -6,7 +6,6 @@ import { mock, instance, when, verify, anything, capture } from 'ts-mockito';
 import bcrypt from 'bcrypt';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-// Mock bcrypt and uuid
 jest.mock('bcrypt');
 jest.mock('uuid', () => ({
   v4: jest.fn(() => 'mocked-uuid')
@@ -46,7 +45,6 @@ describe('CreateUser', () => {
     verify(userRepository.create(anything())).once();
     expect(bcrypt.hash).toHaveBeenCalledWith(createUserDTO.password, 10);
 
-    // Capture the actual User instance passed to create
     const [createdUser] = capture(userRepository.create).last();
     expect(createdUser).toBeDefined();
     expect(createdUser.name).toBe(createUserDTO.name);

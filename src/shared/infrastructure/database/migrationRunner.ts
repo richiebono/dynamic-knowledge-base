@@ -6,7 +6,6 @@ export class MigrationRunner {
     public async up(): Promise<void> {
         const client = await this.pool.connect();
         try {
-            // Create users table
             await client.query(`
                 CREATE TABLE IF NOT EXISTS users (
                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -19,7 +18,6 @@ export class MigrationRunner {
                 );
             `);
 
-            // Create topics table
             await client.query(`
                 CREATE TABLE IF NOT EXISTS topics (
                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -32,7 +30,6 @@ export class MigrationRunner {
                 );
             `);
 
-            // Create resources table
             await client.query(`
                 CREATE TABLE IF NOT EXISTS resources (
                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,17 +54,14 @@ export class MigrationRunner {
     public async down(): Promise<void> {
         const client = await this.pool.connect();
         try {
-            // Drop resources table
             await client.query(`
                 DROP TABLE IF EXISTS resources;
             `);
 
-            // Drop topics table
             await client.query(`
                 DROP TABLE IF EXISTS topics;
             `);
 
-            // Drop users table
             await client.query(`
                 DROP TABLE IF EXISTS users;
             `);

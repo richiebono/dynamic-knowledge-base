@@ -183,6 +183,49 @@ Make sure to configure the following secrets in your GitHub repository:
 - `SERVICE_NAME`: Cloud Run service name.
 - `REGION`: Region where Cloud Run will be deployed.
 
+## Running Locally with Docker Compose
+
+You can run the entire application (backend and database) using Docker Compose, without needing to install Node.js or PostgreSQL locally.
+
+### Quick Start
+
+1. Create a `.env` file in the project root with the required environment variables (see the "Environment Variables" section).
+
+2. Build the Docker images:
+   ```bash
+   docker-compose -f infra/docker/docker-compose.yml build
+   ```
+
+3. Start the containers:
+   ```bash
+   docker-compose -f infra/docker/docker-compose.yml up -d
+   ```
+   This will start the backend and PostgreSQL database in containers.
+
+4. (Optional) Run database migrations:
+   ```bash
+   docker-compose -f infra/docker/docker-compose.yml exec backend bash -c "cd infra/scripts && ./migrate.sh"
+   ```
+
+5. Access the API at:
+   ```
+   http://localhost:3000
+   ```
+   And the Swagger documentation at:
+   ```
+   http://localhost:3000/swagger
+   ```
+
+6. To stop and remove the containers:
+   ```bash
+   docker-compose -f infra/docker/docker-compose.yml down
+   ```
+
+> **Tip:** To view backend logs in real time:
+> ```bash
+> docker-compose -f infra/docker/docker-compose.yml logs -f backend
+> ```
+
 ## Contributing
 Contributions are welcome! Please follow these steps:
 1. Fork the repository.

@@ -5,7 +5,6 @@ import { Topic } from '@topic/domain/entities/topic';
 import { CreateTopicDTO } from '@topic/application/DTOs/topicDTO';
 import { mock, instance, when, verify, anything, deepEqual, capture } from 'ts-mockito';
 
-// Mock UUID to have predictable IDs in tests
 jest.mock('uuid', () => ({
   v4: jest.fn(() => 'mocked-uuid'),
 }));
@@ -19,7 +18,6 @@ describe('CreateTopic', () => {
   beforeEach(() => {
     topicRepository = mock<ITopicRepository>();
     createTopic = new CreateTopic(instance(topicRepository));
-    // Mock Date globally for all tests
     global.Date = class extends RealDate {
       constructor() {
         super();
@@ -112,7 +110,6 @@ describe('CreateTopic', () => {
     // Assert
     verify(topicRepository.create(anything())).once();
     
-    // Capture the argument passed to create() and check its properties
     const capturedArg = capture(topicRepository.create).last()[0];
     expect(capturedArg).toBeInstanceOf(Topic);
     expect(capturedArg.id).toBe('mocked-uuid');

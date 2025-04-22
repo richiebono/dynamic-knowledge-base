@@ -7,7 +7,6 @@ import { mock, instance, verify, when } from 'ts-mockito';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-// Mock express Router
 jest.mock('express', () => {
   const mockRouter = {
     get: jest.fn().mockReturnThis(),
@@ -21,7 +20,6 @@ jest.mock('express', () => {
   };
 });
 
-// Mock AuthMiddleware
 jest.mock('@shared/infrastructure/middleware/authMiddleware', () => {
   const mockCheckPermissions = jest.fn(() => jest.fn());
   
@@ -44,7 +42,6 @@ describe('TopicRoutes', () => {
     topicController = mock(TopicController);
     validationMiddleware = mock(TopicValidationMiddleware);
     
-    // Clear mocks
     jest.clearAllMocks();
     
     topicRoutes = new TopicRoutes(
@@ -59,20 +56,18 @@ describe('TopicRoutes', () => {
     expect(Router).toHaveBeenCalled();
     expect(mockRouter.post).toHaveBeenCalled();
     expect(mockRouter.put).toHaveBeenCalled();
-    expect(mockRouter.get).toHaveBeenCalledTimes(4); // For all get endpoints
+    expect(mockRouter.get).toHaveBeenCalledTimes(4);
   });
   
   it('should set up POST / route with admin permissions', () => {
-    // Arrange & Act - done in beforeEach
-    
     // Assert
     const authMiddleware = new AuthMiddleware();
     expect(authMiddleware.checkPermissions).toHaveBeenCalledWith(UserRoleEnum.Admin);
     expect(mockRouter.post).toHaveBeenCalledWith(
       '/',
-      expect.any(Function), // auth middleware
-      expect.any(Function), // validation
-      expect.any(Function)  // controller
+      expect.any(Function), 
+      expect.any(Function), 
+      expect.any(Function)  
     );
   });
   
@@ -81,11 +76,10 @@ describe('TopicRoutes', () => {
     const authMiddleware = new AuthMiddleware();
     expect(authMiddleware.checkPermissions).toHaveBeenCalledWith(UserRoleEnum.Viewer);
     
-    // Verify one of the GET routes
     expect(mockRouter.get).toHaveBeenCalledWith(
       '/',
-      expect.any(Function), // auth middleware
-      expect.any(Function)  // controller
+      expect.any(Function),
+      expect.any(Function)
     );
   });
   

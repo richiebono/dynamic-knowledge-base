@@ -91,7 +91,6 @@ describe('UpdateTopic', () => {
       parentTopicId: 'original-parent-id'
     });
 
-    // Only updating name
     const updateTopicDTO: UpdateTopicDTO = {
       name: 'Updated Name',
       updatedBy: 'user-id',

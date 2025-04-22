@@ -32,10 +32,8 @@ describe('ResourceValidationMiddleware', () => {
       
       when(req.body).thenReturn(validBody);
       
-      // Act - pass the next function directly
       middleware.validateCreateResource(instance(req), instance(res), next);
       
-      // Assert - check if the next function was called
       expect(next).toHaveBeenCalled();
       verify(res.status(anything())).never();
     });

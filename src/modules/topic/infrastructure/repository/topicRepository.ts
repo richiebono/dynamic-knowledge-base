@@ -94,7 +94,7 @@ export class TopicRepository implements ITopicRepository {
     async getTotalTopicsCount(): Promise<number> {
         const result = await this.dbConnection.query<{ count: string }>(
             'SELECT COUNT(*) AS count FROM topics',
-            [] // Add empty array as second parameter to match the mock expectation
+            []
         );
         
         if (!result || !result.rows || !result.rows[0]) {

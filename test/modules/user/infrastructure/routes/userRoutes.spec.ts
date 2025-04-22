@@ -7,7 +7,6 @@ import { mock, instance, verify, when } from 'ts-mockito';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-// Mock express Router
 jest.mock('express', () => {
   const mockRouter = {
     get: jest.fn().mockReturnThis(),
@@ -21,7 +20,6 @@ jest.mock('express', () => {
   };
 });
 
-// Mock AuthMiddleware
 jest.mock('@shared/infrastructure/middleware/authMiddleware', () => {
   const mockCheckPermissions = jest.fn(() => jest.fn());
   
@@ -44,7 +42,6 @@ describe('UserRoutes', () => {
     userController = mock(UserController);
     validationMiddleware = mock(UserValidationMiddleware);
     
-    // Clear mocks
     jest.clearAllMocks();
     
     userRoutes = new UserRoutes(
@@ -57,9 +54,9 @@ describe('UserRoutes', () => {
   
   it('should initialize routes', () => {
     expect(Router).toHaveBeenCalled();
-    expect(mockRouter.post).toHaveBeenCalledTimes(2); // '/' and '/login'
+    expect(mockRouter.post).toHaveBeenCalledTimes(2);
     expect(mockRouter.put).toHaveBeenCalled();
-    expect(mockRouter.get).toHaveBeenCalledTimes(2); // '/' and '/:id'
+    expect(mockRouter.get).toHaveBeenCalledTimes(2);
   });
   
   it('should set up POST / route with admin permissions', () => {
@@ -68,9 +65,9 @@ describe('UserRoutes', () => {
     expect(authMiddleware.checkPermissions).toHaveBeenCalledWith(UserRoleEnum.Admin);
     expect(mockRouter.post).toHaveBeenCalledWith(
       '/',
-      expect.any(Function), // auth middleware
-      expect.any(Function), // validation
-      expect.any(Function)  // controller
+      expect.any(Function),
+      expect.any(Function),
+      expect.any(Function)
     );
   });
   
@@ -81,8 +78,8 @@ describe('UserRoutes', () => {
     
     expect(mockRouter.get).toHaveBeenCalledWith(
       '/:id',
-      expect.any(Function), // auth middleware
-      expect.any(Function)  // controller
+      expect.any(Function),
+      expect.any(Function)
     );
   });
 
@@ -93,8 +90,8 @@ describe('UserRoutes', () => {
     
     expect(mockRouter.get).toHaveBeenCalledWith(
       '/',
-      expect.any(Function), // auth middleware
-      expect.any(Function)  // controller
+      expect.any(Function),
+      expect.any(Function)
     );
   });
   
@@ -102,7 +99,7 @@ describe('UserRoutes', () => {
     // Assert
     expect(mockRouter.post).toHaveBeenCalledWith(
       '/login',
-      expect.any(Function)  // controller only
+      expect.any(Function)
     );
   });
   
