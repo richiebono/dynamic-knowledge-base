@@ -1,37 +1,60 @@
-name: CI
+name: Deploy to Cloud Run
 
 on:
   pull_request:
     branches:
       - main
+    types: [closed]
 
 jobs:
-  build:
+  build-and-deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run unit tests
+        run: npm test -- --coverage
 
-      - name: Build the project
-        run: npm run build
-
-      - name: Run database migrations
-        run: npm run migrate
-
-      - name: Deploy
-        run: npm run deploy
+      - name: Run SonarQube analysis
         env:
-          NODE_ENV: production
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npm install -g sonar-scanner
+          sonar-scanner \
+            -Dsonar.projectKey=knowledge-base-backend \
+            -Dsonar.sources=./src \
+            -Dsonar.tests=./src \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      - name: Create Environment File
+        run: |
+          echo "${{ secrets.ENV }}" | base64 --decode > .env
+
+      - name: Create service account key
+        run: |
+          echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > service-account-key.json
+
+      - name: Authenticate to Google Cloud
+        run: |
+          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/service-account-key.json
+          gcloud auth activate-service-account --key-file="$GOOGLE_APPLICATION_CREDENTIALS"
+          gcloud config set project "$(jq -r .project_id service-account-key.json)"
+
+      - name: Run Cloud SQL setup
+        run: bash infra/scripts/cloud_sql.sh
+
+      - name: Deploy to Cloud Run
+        run: bash infra/scripts/cloud_run_deploy.sh

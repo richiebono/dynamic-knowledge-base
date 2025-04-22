@@ -5,15 +5,15 @@ LABEL version="1.0.0"
 
 WORKDIR /usr/src/app
 
-# Copy package files
-COPY package*.json ./
-COPY tsconfig.json ./
+# Adjust the context for copying files
+COPY ../../package*.json ./
+COPY ../../tsconfig.json ./
 
 # Install all dependencies
 RUN npm install
 
 # Copy source code
-COPY . .
+COPY ../../ ./
 
 # Build the application
 RUN npm run build
@@ -26,9 +26,9 @@ LABEL version="1.0.0"
 
 WORKDIR /usr/src/app
 
-# Copy package files and configs
-COPY package*.json ./
-COPY tsconfig.json ./
+# Adjust the context for copying files
+COPY ../../package*.json ./
+COPY ../../tsconfig.json ./
 
 # Install only production dependencies
 RUN npm ci --only=production
@@ -37,7 +37,7 @@ RUN npm ci --only=production
 COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy .env file
-COPY .env ./
+COPY ../../.env ./
 
 EXPOSE 8080
 
