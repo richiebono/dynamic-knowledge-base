@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
-import { Topic } from '../../domain/entities/topic';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { TopicDbConnection } from '../database/topicDbConnection';
+import { Topic } from '@topic/domain/entities/topic';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
 
 @injectable()
 export class TopicRepository implements ITopicRepository {
@@ -72,6 +72,22 @@ export class TopicRepository implements ITopicRepository {
             [id, version]
         );
         return result.rows.length ? this.mapToTopic(result.rows[0]) : null;
+    }
+
+    async getPaginatedTopics(limit: number, offset: number, orderBy: string, orderDirection: string): Promise<Topic[]> {
+        const result = await this.dbConnection.query<{ id: string; name: string; content: string; createdAt: Date; updatedAt: Date; version: number; parentTopicId?: string }>(
+            `SELECT id, name, content, createdAt, updatedAt, version, parentTopicId 
+             FROM topics 
+             ORDER BY ${orderBy} ${orderDirection} 
+             LIMIT $1 OFFSET $2`,
+            [limit, offset]
+        );
+        return result.rows.map(this.mapToTopic);
+    }
+
+    async getTotalTopicsCount(): Promise<number> {
+        const result = await this.dbConnection.query<{ count: string }>('SELECT COUNT(*) AS count FROM topics');
+        return parseInt(result.rows[0].count, 10);
     }
 
     private mapToTopic(row: { id: string; name: string; content: string; createdAt?: Date; updatedAt?: Date; version: number; parentTopicId?: string }): Topic {

@@ -2,15 +2,15 @@ import 'reflect-metadata'; // Required for inversify
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { inject, injectable } from 'inversify';
-import { DbConnection } from './shared/infrastructure/database/dbConnection';
-import { AuthMiddleware } from './shared/infrastructure/middleware/authMiddleware';
-import { ErrorHandler } from './shared/infrastructure/middleware/errorHandler';
-// import { TopicRoutes } from './modules/topic/infrastructure/routes/topicRoutes';
-// import { ResourceRoutes } from './modules/resource/infrastructure/routes/resourceRoutes';
-import { UserRoutes } from './modules/user/infrastructure/routes/userRoutes';
-import { swaggerSpec } from './shared/infrastructure/config/swaggerConfig';
-import { MigrationRunner } from './shared/infrastructure/database/migrationRunner';
-import { ENV } from './shared/infrastructure/config/env';
+import { DbConnection } from '@shared/infrastructure/database/dbConnection';
+import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
+import { ErrorHandler } from '@shared/infrastructure/middleware/errorHandler';
+import { TopicRoutes } from '@topic/infrastructure/routes/topicRoutes';
+import { ResourceRoutes } from '@resource/infrastructure/routes/resourceRoutes';
+import { UserRoutes } from '@user/infrastructure/routes/userRoutes';
+import { swaggerSpec } from '@shared/infrastructure/config/swaggerConfig';
+import { MigrationRunner } from '@shared/infrastructure/database/migrationRunner';
+import { ENV } from '@shared/infrastructure/config/env';
 
 @injectable()
 export class App {
@@ -19,8 +19,8 @@ export class App {
     constructor(
         @inject(DbConnection) private dbConnection: DbConnection,
         @inject(AuthMiddleware) private authMiddleware: AuthMiddleware,
-        // @inject(TopicRoutes) private topicRoutes: TopicRoutes,
-        // @inject(ResourceRoutes) private resourceRoutes: ResourceRoutes,
+        @inject(TopicRoutes) private topicRoutes: TopicRoutes,
+        @inject(ResourceRoutes) private resourceRoutes: ResourceRoutes,
         @inject(UserRoutes) private userRoutes: UserRoutes,
         @inject(ErrorHandler) private errorHandler: ErrorHandler,
         @inject(MigrationRunner) private migrationRunner: MigrationRunner
@@ -37,8 +37,8 @@ export class App {
     }
 
     private initializeRoutes() {
-        // this.app.use('/api/topics', this.topicRoutes.getRouter());
-        // this.app.use('/api/resources', this.resourceRoutes.getRouter());
+        this.app.use('/api/topics', this.topicRoutes.getRouter());
+        this.app.use('/api/resources', this.resourceRoutes.getRouter());
         this.app.use('/api/users', this.userRoutes.getRouter());
         this.app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     }

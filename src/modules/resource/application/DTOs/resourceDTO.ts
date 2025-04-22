@@ -5,7 +5,7 @@ export interface ResourceDTO {
     description: string;
     type: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt?: Date; 
 }
 
 export interface CreateResourceDTO {

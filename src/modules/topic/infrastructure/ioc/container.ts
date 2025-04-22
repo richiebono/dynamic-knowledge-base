@@ -1,21 +1,21 @@
 import 'reflect-metadata';
 import { ContainerModule, interfaces } from 'inversify';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { TopicController } from '../controllers/topicController';
-import { TopicRoutes } from '../routes/topicRoutes';
-import { ITopicCommandHandler } from '../../application/interfaces/topicCommandHandler';
-import { TopicCommandHandler } from '../../application/handlers/topicCommandHandler';
-import { ITopicQueryHandler } from '../../application/interfaces/topicQueryHandler';
-import { TopicQueryHandler } from '../../application/handlers/topicQueryHandler';
-import { CreateTopic } from '../../application/useCases/createTopic';
-import { UpdateTopic } from '../../application/useCases/updateTopic';
-import { DeleteTopic } from '../../application/useCases/deleteTopic';
-import { GetTopicById } from '../../application/useCases/getTopicById';
-import { GetTopicTree } from '../../application/useCases/getTopicTree';
-import { FindShortestPath } from '../../application/useCases/findShortestPath';
-import { TopicRepository } from '../repository/topicRepository';
-import { DbConnection } from 'shared/infrastructure/database/dbConnection';
-import { TopicDbConnection } from '../database/topicDbConnection';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { TopicController } from '@topic/infrastructure/controllers/topicController';
+import { TopicRoutes } from '@topic/infrastructure/routes/topicRoutes';
+import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
+import { TopicCommandHandler } from '@topic/application/handlers/topicCommandHandler';
+import { ITopicQueryHandler } from '@topic/application/interfaces/topicQueryHandler';
+import { TopicQueryHandler } from '@topic/application/handlers/topicQueryHandler';
+import { CreateTopic } from '@topic/application/useCases/createTopic';
+import { UpdateTopic } from '@topic/application/useCases/updateTopic';
+import { DeleteTopic } from '@topic/application/useCases/deleteTopic';
+import { GetTopicById } from '@topic/application/useCases/getTopicById';
+import { GetTopicTree } from '@topic/application/useCases/getTopicTree';
+import { FindShortestPath } from '@topic/application/useCases/findShortestPath';
+import { TopicRepository } from '@topic/infrastructure/repository/topicRepository';
+import { DbConnection } from '@shared/infrastructure/database/dbConnection';
+import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
 
 const topicContainer = new ContainerModule((bind: interfaces.Bind) => {
     // Use TopicDbConnection for the topic module

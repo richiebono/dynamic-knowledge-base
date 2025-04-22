@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import { ContainerModule, interfaces } from 'inversify';
-import { IResourceRepository } from '../../domain/interfaces/resourceRepository';
-import { ResourceController } from '../controllers/resourceController';
-import { ResourceRoutes } from '../routes/resourceRoutes';
-import { DbConnection } from 'shared/infrastructure/database/dbConnection';
-import { ResourceDbConnection } from '../database/resourceDbConnection';
-import { ResourceRepository } from '../repository/resourceRepository';
+import { IResourceRepository } from '@resource/domain/interfaces/resourceRepository';
+import { ResourceController } from '@resource/infrastructure/controllers/resourceController';
+import { ResourceRoutes } from '@resource/infrastructure/routes/resourceRoutes';
+import { DbConnection } from '@shared/infrastructure/database/dbConnection';
+import { ResourceDbConnection } from '@resource/infrastructure/database/resourceDbConnection';
+import { ResourceRepository } from '@resource/infrastructure/repository/resourceRepository';
 
 const resourceContainer = new ContainerModule((bind: interfaces.Bind) => {
     // Use ResourceDbConnection for the resource module

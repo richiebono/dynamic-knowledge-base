@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
 
 @injectable()
 export class GetTopicById {

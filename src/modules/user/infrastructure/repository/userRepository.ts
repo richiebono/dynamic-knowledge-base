@@ -1,8 +1,9 @@
 import { injectable, inject } from 'inversify';
-import { User } from '../../domain/entities/user';
-import { IUserRepository } from '../../domain/interfaces/userRepository';
-import { UserDbConnection } from '../database/userDbConnection';
-import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
+import { User } from '@user/domain/entities/user';
+import { IUserRepository } from '@user/domain/interfaces/userRepository';
+import { UserDbConnection } from '@user/infrastructure/database/userDbConnection';
+
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -40,11 +41,20 @@ export class UserRepository implements IUserRepository {
         return result.rows.length ? this.mapToUser(result.rows[0]) : null;
     }
 
-    async findAll(): Promise<User[]> {
+    async findAll(limit: number, offset: number, orderBy: string, orderDirection: 'ASC' | 'DESC'): Promise<User[]> {
         const result = await this.dbConnection.query<{ id: string; name: string; email: string; role: string; password: string; createdAt: Date; updatedAt?: Date }>(
-            'SELECT id, name, email, role, password, createdAt, updatedAt FROM users'
+            `SELECT id, name, email, role, password, createdAt, updatedAt 
+             FROM users 
+             ORDER BY ${orderBy} ${orderDirection} 
+             LIMIT $1 OFFSET $2`,
+            [limit, offset]
         );
         return result.rows.map(this.mapToUser);
+    }
+
+    async getTotalUsersCount(): Promise<number> {
+        const result = await this.dbConnection.query<{ count: string }>('SELECT COUNT(*) as count FROM users');
+        return parseInt(result.rows[0].count, 10);
     }
 
     async delete(id: string): Promise<void> {

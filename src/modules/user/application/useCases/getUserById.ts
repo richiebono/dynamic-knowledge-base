@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { IUserRepository } from '../../domain/interfaces/userRepository';
-import { UserDTO } from '../DTOs/userDTO';
-import { User } from '../../domain/entities/user';
+import { IUserRepository } from '@user/domain/interfaces/userRepository';
+import { UserDTO } from '@user/application/DTOs/userDTO';
+import { User } from '@user/domain/entities/user';
 
 @injectable()
 export class GetUserById {

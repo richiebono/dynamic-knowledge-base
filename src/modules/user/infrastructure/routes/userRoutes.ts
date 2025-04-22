@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { injectable, inject } from 'inversify';
-import { UserController } from '../controllers/userController';
-import { UserValidationMiddleware } from '../middleware/userValidation';
-import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
-import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
+import { UserController } from '@user/infrastructure/controllers/userController';
+import { UserValidationMiddleware } from '@user/infrastructure/middleware/userValidation';
 
 @injectable()
 export class UserRoutes {
@@ -110,6 +110,28 @@ export class UserRoutes {
          *   get:
          *     summary: Get all users
          *     tags: [Users]
+         *     parameters:
+         *       - in: query
+         *         name: limit
+         *         schema:
+         *           type: integer
+         *         description: Number of users to return
+         *       - in: query
+         *         name: offset
+         *         schema:
+         *           type: integer
+         *         description: Number of users to skip
+         *       - in: query
+         *         name: orderBy
+         *         schema:
+         *           type: string
+         *         description: Field to order by (e.g., name, email, createdAt)
+         *       - in: query
+         *         name: orderDirection
+         *         schema:
+         *           type: string
+         *           enum: [ASC, DESC]
+         *         description: Order direction (ASC or DESC)
          *     responses:
          *       200:
          *         description: List of users

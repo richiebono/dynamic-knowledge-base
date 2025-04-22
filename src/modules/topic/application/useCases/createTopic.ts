@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { Topic } from '../../domain/entities/topic';
-import { CreateTopicDTO, TopicDTO } from '../DTOs/topicDTO';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { Topic } from '@topic/domain/entities/topic';
+import { CreateTopicDTO, TopicDTO } from '@topic/application/DTOs/topicDTO';
 
 @injectable()
 export class CreateTopic {

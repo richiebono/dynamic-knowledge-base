@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { CreateTopic } from '../useCases/createTopic';
-import { UpdateTopic } from '../useCases/updateTopic';
-import { CreateTopicDTO, UpdateTopicDTO } from '../DTOs/topicDTO';
-import { ITopicCommandHandler } from '../interfaces/topicCommandHandler';
-import { DeleteTopic } from '../useCases/deleteTopic';
+import { CreateTopic } from '@topic/application/useCases/createTopic';
+import { UpdateTopic } from '@topic/application/useCases/updateTopic';
+import { CreateTopicDTO, UpdateTopicDTO } from '@topic/application/DTOs/topicDTO';
+import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
+import { DeleteTopic } from '@topic/application/useCases/deleteTopic';
 
 @injectable()
 export class TopicCommandHandler implements ITopicCommandHandler {

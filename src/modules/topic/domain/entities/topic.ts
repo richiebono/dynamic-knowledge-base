@@ -1,5 +1,3 @@
-import { TopicDTO } from "modules/topic/application/DTOs/topicDTO";
-
 export class Topic {
     
     id: string;

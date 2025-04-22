@@ -1,5 +1,4 @@
 export interface TopicDTO {
-    subTopics: TopicDTO[];
     id: string;
     name: string;
     content: string;
@@ -7,6 +6,7 @@ export interface TopicDTO {
     updatedAt?: Date;
     version: number;
     parentTopicId?: string;
+    subTopics?: TopicDTO[];
 }
 
 export interface CreateTopicDTO {

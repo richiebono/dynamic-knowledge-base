@@ -1,7 +1,7 @@
 import 'reflect-metadata'; // Required for inversify
-import { container } from './shared/infrastructure/ioc/container';
+import { container } from '@shared/infrastructure/ioc/container';
 import { App } from './app';
-import { ENV } from './shared/infrastructure/config/env';
+import { ENV } from '@shared/infrastructure/config/env';
 
 const app = container.resolve(App);
 

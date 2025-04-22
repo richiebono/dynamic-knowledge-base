@@ -1,4 +1,4 @@
-import { ResourceDTO } from '../DTOs/resourceDTO';
+import { ResourceDTO } from '@resource/application/DTOs/resourceDTO';
 
 export interface IResourceCommandHandler {
     createResource(resourceDTO: ResourceDTO): Promise<void>;

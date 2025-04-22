@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 import { injectable } from 'inversify';
-import { ResourceType } from '../../domain/enum/resourceType';
+import { ResourceType } from '@resource/domain/enum/resourceType';
 
 @injectable()
 export class ResourceValidationMiddleware {

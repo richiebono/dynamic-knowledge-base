@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { IUserCommandHandler } from '../../application/interfaces/userCommandHandler';
-import { IUserQueryHandler } from '../../application/interfaces/userQueryHandler';
-import { LoginUser } from '../../application/useCases/loginUser';
+import { IUserCommandHandler } from '@user/application/interfaces/userCommandHandler';
+import { IUserQueryHandler } from '@user/application/interfaces/userQueryHandler';
+import { LoginUser } from '@user/application/useCases/loginUser';
+import { LoginDTO } from '@user/application/DTOs/userDTO';
 
 @injectable()
 export class UserController {
@@ -11,8 +12,7 @@ export class UserController {
 
     constructor(
         @inject("IUserCommandHandler") userCommandHandler: IUserCommandHandler,
-        @inject("IUserQueryHandler") userQueryHandler: IUserQueryHandler,
-        @inject(LoginUser) private loginUserUseCase: LoginUser
+        @inject("IUserQueryHandler") userQueryHandler: IUserQueryHandler
     ) {
         this.userCommandHandler = userCommandHandler;
         this.userQueryHandler = userQueryHandler;
@@ -43,12 +43,15 @@ export class UserController {
 
     public async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
-            const users = await this.userQueryHandler.getAllUsers();
+            const limit = parseInt(req.query.limit as string) || 10;
+            const offset = parseInt(req.query.offset as string) || 0;
+            const orderBy = (req.query.orderBy as string) || 'createdAt';
+            const orderDirection = (req.query.orderDirection as string)?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+            const users = await this.userQueryHandler.getAllUsers(limit, offset, orderBy, orderDirection);
             res.status(200).json(users);
-        }
-        catch (error) {
+        } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on getAllUsers';
-            res.status(500).json({ message:errorMessage });
+            res.status(500).json({ message: errorMessage });
         }
     }
 
@@ -80,8 +83,8 @@ export class UserController {
 
     public async login(req: Request, res: Response): Promise<void> {
         try {
-            const { email, password } = req.body;
-            const token = await this.loginUserUseCase.execute(email, password);
+            const loginDTO: LoginDTO = req.body;
+            const token = await this.userCommandHandler.loginUser(loginDTO);
             res.status(200).json({ token });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on login';

@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { IUserRepository } from '../../domain/interfaces/userRepository';
-import { UpdateUserDTO } from '../DTOs/userDTO';
-import { User } from '../../domain/entities/user';
+import { IUserRepository } from '@user/domain/interfaces/userRepository';
+import { UpdateUserDTO } from '@user/application/DTOs/userDTO';
+import { User } from '@user/domain/entities/user';
 import bcrypt from 'bcrypt';
-import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 @injectable()
 export class UpdateUser {

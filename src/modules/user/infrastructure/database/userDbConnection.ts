@@ -1,4 +1,4 @@
-import { DbConnection } from 'shared/infrastructure/database/dbConnection';
+import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 
 export class UserDbConnection extends DbConnection {
     private constructor() {

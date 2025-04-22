@@ -1,4 +1,4 @@
-import { Topic } from "../entities/topic";
+import { Topic } from '@topic/domain/entities/topic';
 
 export interface ITopicRepository {
     findSubTopics(currentId: string): Promise<Topic[]>;
@@ -9,4 +9,6 @@ export interface ITopicRepository {
     findAll(): Promise<Topic[]>;
     findByParentId(parentTopicId: string): Promise<Topic[]>;
     findVersionById(id: string, version: number): Promise<Topic | null>;
+    getPaginatedTopics(limit: number, offset: number, orderBy: string, orderDirection: string): Promise<Topic[]>;
+    getTotalTopicsCount(): Promise<number>;
 }

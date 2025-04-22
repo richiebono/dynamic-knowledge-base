@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { TopicController } from '../controllers/topicController';
-import { TopicValidationMiddleware } from '../middleware/topicValidation';
-import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
-import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+import { TopicController } from '@topic/infrastructure/controllers/topicController';
+import { TopicValidationMiddleware } from '@topic/infrastructure/middleware/topicValidation';
+import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 
 export class TopicRoutes {
@@ -150,6 +150,44 @@ export class TopicRoutes {
             '/shortest-path/:startId/:endId',
             authMiddleware.checkPermissions(UserRoleEnum.Viewer),
             this.topicController.findShortestPath.bind(this.topicController)
+        );
+
+        /**
+         * @swagger
+         * /topics:
+         *   get:
+         *     summary: Get all topics
+         *     tags: [Topics]
+         *     parameters:
+         *       - in: query
+         *         name: limit
+         *         schema:
+         *           type: integer
+         *         description: Number of topics to return
+         *       - in: query
+         *         name: offset
+         *         schema:
+         *           type: integer
+         *         description: Number of topics to skip
+         *       - in: query
+         *         name: orderBy
+         *         schema:
+         *           type: string
+         *         description: Field to order by (e.g., name, createdAt)
+         *       - in: query
+         *         name: orderDirection
+         *         schema:
+         *           type: string
+         *           enum: [ASC, DESC]
+         *         description: Order direction (ASC or DESC)
+         *     responses:
+         *       200:
+         *         description: List of topics
+         */
+        this.router.get(
+            '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.topicController.getAllTopics.bind(this.topicController)
         );
     }
 

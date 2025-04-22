@@ -1,14 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { IUserRepository } from '../../domain/interfaces/userRepository';
-import { UserDTO } from '../DTOs/userDTO';
-import { User } from '../../domain/entities/user';
+import { IUserRepository } from '@user/domain/interfaces/userRepository';
+import { UserDTO } from '@user/application/DTOs/userDTO';
+import { User } from '@user/domain/entities/user';
 
 @injectable()
 export class GetAllUsers {
     constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
 
-    public async execute(): Promise<UserDTO[]> {
-        const users: User[] = await this.userRepository.findAll();
+    public async execute(limit: number, offset: number, orderBy: string, orderDirection: 'ASC' | 'DESC'): Promise<UserDTO[]> {
+        const users: User[] = await this.userRepository.findAll(limit, offset, orderBy, orderDirection);
 
         return users.map(user => ({
             id: user.id,

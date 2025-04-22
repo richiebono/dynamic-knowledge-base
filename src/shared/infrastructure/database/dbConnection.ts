@@ -1,5 +1,5 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
-import { ENV } from '../config/env';
+import { ENV } from '@shared/infrastructure/config/env';
 
 export abstract class DbConnection {
     private static instance: DbConnection;

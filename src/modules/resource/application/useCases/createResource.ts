@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { Resource } from '../../domain/entities/resource';
-import { IResourceRepository } from '../../domain/interfaces/resourceRepository';
-import { ResourceDTO } from '../DTOs/resourceDTO';
+import { Resource } from '@resource/domain/entities/resource';
+import { IResourceRepository } from '@resource/domain/interfaces/resourceRepository';
+import { ResourceDTO } from '@resource/application/DTOs/resourceDTO';
 
 @injectable()
 export class CreateResource {

@@ -1,4 +1,4 @@
-import { CreateTopicDTO, UpdateTopicDTO } from '../DTOs/topicDTO';
+import { CreateTopicDTO, UpdateTopicDTO } from '@topic/application/DTOs/topicDTO';
 
 export interface ITopicCommandHandler {
     createTopic(createTopicDTO: CreateTopicDTO): Promise<void>;

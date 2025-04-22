@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserRoleEnum } from '../../../shared/domain/enum/userRole';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
+import { ENV } from '@shared/infrastructure/config/env';
 
 declare global {
   namespace Express {
@@ -24,7 +25,7 @@ export class AuthMiddleware {
       return res.status(401).json({ message: 'No token provided' });
     }
 
-    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+    jwt.verify(token, ENV.JWT.SECRET as string, (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: 'Failed to authenticate token' });
       }

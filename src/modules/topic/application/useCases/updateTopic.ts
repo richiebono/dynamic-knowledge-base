@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { Topic } from '../../domain/entities/topic';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { UpdateTopicDTO } from '../DTOs/topicDTO';
+import { Topic } from '@topic/domain/entities/topic';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { UpdateTopicDTO } from '@topic/application/DTOs/topicDTO';
 
 @injectable()
 export class UpdateTopic {

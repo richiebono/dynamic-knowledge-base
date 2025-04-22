@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IResourceRepository } from '../../domain/interfaces/resourceRepository';
+import { IResourceRepository } from '@resource/domain/interfaces/resourceRepository';
 
 @injectable()
 export class DeleteResource {

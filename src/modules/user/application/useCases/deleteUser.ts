@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IUserRepository } from '../../domain/interfaces/userRepository';
+import { IUserRepository } from '@user/domain/interfaces/userRepository';
 
 @injectable()
 export class DeleteUser {

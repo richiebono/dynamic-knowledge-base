@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { Topic } from '../../domain/entities/topic';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { Topic } from '@topic/domain/entities/topic';
 
 @injectable()
 export class FindShortestPath {

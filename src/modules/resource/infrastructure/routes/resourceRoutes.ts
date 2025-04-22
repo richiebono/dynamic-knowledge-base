@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { injectable, inject } from 'inversify';
-import { ResourceController } from '../controllers/resourceController';
-import { ResourceValidationMiddleware } from '../middleware/resourceValidation';
-import { AuthMiddleware } from '../../../../shared/infrastructure/middleware/authMiddleware';
-import { UserRoleEnum } from '../../../../shared/domain/enum/userRole';
+import { ResourceController } from '@resource/infrastructure/controllers/resourceController';
+import { ResourceValidationMiddleware } from '@resource/infrastructure/middleware/resourceValidation';
+import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 @injectable()
 export class ResourceRoutes {
@@ -124,6 +124,44 @@ export class ResourceRoutes {
             '/topic/:topicId',
             authMiddleware.checkPermissions(UserRoleEnum.Viewer), 
             this.resourceController.getResourcesByTopicId.bind(this.resourceController)
+        );
+
+        /**
+         * @swagger
+         * /resources:
+         *   get:
+         *     summary: Get all resources
+         *     tags: [Resources]
+         *     parameters:
+         *       - in: query
+         *         name: limit
+         *         schema:
+         *           type: integer
+         *         description: Number of resources to return
+         *       - in: query
+         *         name: offset
+         *         schema:
+         *           type: integer
+         *         description: Number of resources to skip
+         *       - in: query
+         *         name: orderBy
+         *         schema:
+         *           type: string
+         *         description: Field to order by (e.g., name, createdAt)
+         *       - in: query
+         *         name: orderDirection
+         *         schema:
+         *           type: string
+         *           enum: [ASC, DESC]
+         *         description: Order direction (ASC or DESC)
+         *     responses:
+         *       200:
+         *         description: List of resources
+         */
+        this.router.get(
+            '/',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.resourceController.getAllResources.bind(this.resourceController)
         );
 
         /**

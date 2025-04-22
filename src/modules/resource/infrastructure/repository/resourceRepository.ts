@@ -50,6 +50,25 @@ export class ResourceRepository implements IResourceRepository {
         return result.rows.map(this.mapToResource);
     }
 
+    async findAllPaginated(limit: number, offset: number, orderBy: string, orderDirection: string): Promise<Resource[]> {
+        const query = `
+            SELECT * FROM resources
+            ORDER BY ${orderBy} ${orderDirection}
+            LIMIT $1 OFFSET $2
+        `;
+        const result = await this.dbConnection.query<{ id: string; topicId: string; url: string; description: string; type: string; createdAt: Date }>(
+            query,
+            [limit, offset]
+        );
+        return result.rows.map(this.mapToResource);
+    }
+
+    async getTotalResourceCount(): Promise<number> {
+        const countQuery = 'SELECT COUNT(*) FROM resources';
+        const countResult = await this.dbConnection.query<{ count: string }>(countQuery);
+        return parseInt(countResult.rows[0].count, 10);
+    }
+
     private mapToResource(row: { id: string; topicId: string; url: string; description: string; type: string; createdAt?: Date; updatedAt?: Date }): Resource {
         return new Resource({
             id: row.id,

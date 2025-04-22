@@ -1,5 +1,5 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import { ENV } from './env';
+import { ENV } from '@shared/infrastructure/config/env';
 
 const swaggerOptions = {
     definition: {
@@ -16,7 +16,7 @@ const swaggerOptions = {
         ],
     },
     apis: [
-        './src/modules/**/infrastructure/routes/*.ts', // Path to route files
+        './src/modules/**/infrastructure/routes/*.ts', 
     ],
 };
 

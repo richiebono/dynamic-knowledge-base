@@ -2,12 +2,13 @@
   "name": "knowledge-base-backend",
   "version": "1.0.0",
   "description": "A RESTful API for a Dynamic Knowledge Base System.",
-  "main": "src/app.ts",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "node dist/server.js",
     "build": "tsc",
     "migrate": "sh infra/scripts/migrate.sh",
-    "test": "jest"
+    "test": "jest",
+    "start:dev": "ts-node src/server.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -45,6 +46,6 @@
     "typescript",
     "express"
   ],
-  "author": "Your Name",
+  "author": "Richard Bono",
   "license": "MIT"
 }

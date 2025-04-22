@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { ITopicCommandHandler } from '../../application/interfaces/topicCommandHandler';
-import { ITopicQueryHandler } from 'modules/topic/application/interfaces/topicQueryHandler';
+import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
+import { ITopicQueryHandler } from '@topic/application/interfaces/topicQueryHandler';
 
 @injectable()
 export class TopicController {
@@ -72,6 +72,21 @@ export class TopicController {
             res.status(200).json(path);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on findShortestPath';
+            res.status(500).json({ message: errorMessage });
+        }
+    }
+
+    public async getAllTopics(req: Request, res: Response): Promise<void> {
+        try {
+            const limit = parseInt(req.query.limit as string) || 10;
+            const offset = parseInt(req.query.offset as string) || 0;
+            const orderBy = (req.query.orderBy as string) || 'createdAt';
+            const orderDirection = (req.query.orderDirection as string)?.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+            
+            const response = await this.topicQueryHandler.getAllTopics(limit, offset, orderBy, orderDirection);
+            res.status(200).json(response);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on getAllTopics';
             res.status(500).json({ message: errorMessage });
         }
     }

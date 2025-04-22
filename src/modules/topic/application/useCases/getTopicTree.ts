@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { ITopicRepository } from '../../domain/interfaces/topicRepository';
-import { TopicDTO } from '../DTOs/topicDTO';
-import { Topic } from '../../domain/entities/topic';
+import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
+import { TopicDTO } from '@topic/application/DTOs/topicDTO';
+import { Topic } from '@topic/domain/entities/topic';
 
 @injectable()
 export class GetTopicTree {
