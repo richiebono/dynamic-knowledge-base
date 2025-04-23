@@ -91,4 +91,19 @@ export class TopicController {
             res.status(500).json({ message: errorMessage });
         }
     }
+
+    public async deleteTopic(req: Request, res: Response): Promise<void> {
+        try {
+            const topicId = req.params.id;
+            await this.topicCommandHandler.deleteTopic(topicId);
+            res.status(204).send();
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on deleteTopic';
+            if (errorMessage.includes('not found')) {
+                res.status(404).json({ message: errorMessage });
+            } else {
+                res.status(500).json({ message: errorMessage });
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ import { ResourceCommandHandler } from '@resource/application/handlers/resourceC
 import { CreateResource } from '@resource/application/useCases/createResource';
 import { UpdateResource } from '@resource/application/useCases/updateResource';
 import { DeleteResource } from '@resource/application/useCases/deleteResource';
+import { DeleteResourcesByTopicId } from '@resource/application/useCases/deleteResourcesByTopicId';
 import { ResourceDTO } from '@resource/application/DTOs/resourceDTO';
 import { mock, instance, verify, when } from 'ts-mockito';
 
@@ -10,17 +11,20 @@ describe('ResourceCommandHandler', () => {
     let createResourceUseCase: CreateResource;
     let updateResourceUseCase: UpdateResource;
     let deleteResourceUseCase: DeleteResource;
+    let deleteResourcesByTopicIdUseCase: DeleteResourcesByTopicId;
     let resourceCommandHandler: ResourceCommandHandler;
 
     beforeEach(() => {
         createResourceUseCase = mock(CreateResource);
         updateResourceUseCase = mock(UpdateResource);
         deleteResourceUseCase = mock(DeleteResource);
+        deleteResourcesByTopicIdUseCase = mock(DeleteResourcesByTopicId);
 
         resourceCommandHandler = new ResourceCommandHandler(
             instance(createResourceUseCase),
             instance(updateResourceUseCase),
-            instance(deleteResourceUseCase)
+            instance(deleteResourceUseCase),
+            instance(deleteResourcesByTopicIdUseCase)
         );
     });
 
@@ -63,5 +67,13 @@ describe('ResourceCommandHandler', () => {
         await resourceCommandHandler.deleteResource(resourceId);
 
         verify(deleteResourceUseCase.execute(resourceId)).once();
+    });
+
+    it('should call execute on DeleteResourcesByTopicId use case when deleteResourcesByTopicId is called', async () => {
+        const topicId = 'topic-id';
+
+        await resourceCommandHandler.deleteResourcesByTopicId(topicId);
+
+        verify(deleteResourcesByTopicIdUseCase.execute(topicId)).once();
     });
 });

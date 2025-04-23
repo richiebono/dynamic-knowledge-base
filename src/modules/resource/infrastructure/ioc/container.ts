@@ -11,6 +11,7 @@ import { ResourceCommandHandler } from '@resource/application/handlers/resourceC
 import { CreateResource } from '@resource/application/useCases/createResource';
 import { UpdateResource } from '@resource/application/useCases/updateResource';
 import { DeleteResource } from '@resource/application/useCases/deleteResource';
+import { DeleteResourcesByTopicId } from '@resource/application/useCases/deleteResourcesByTopicId';
 import { GetAllResources } from '@resource/application/useCases/getAllResources';
 import { GetTotalResourceCount } from '@resource/application/useCases/getTotalResourceCount';
 import { GetResourceById } from '@resource/application/useCases/getResourceById';
@@ -39,6 +40,7 @@ const resourceContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind(CreateResource).toSelf();
     bind(UpdateResource).toSelf();
     bind(DeleteResource).toSelf();
+    bind(DeleteResourcesByTopicId).toSelf();
     bind(GetAllResources).toSelf();
     bind(GetTotalResourceCount).toSelf();
     bind(GetResourceById).toSelf();

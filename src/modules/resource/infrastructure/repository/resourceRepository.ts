@@ -27,6 +27,10 @@ export class ResourceRepository implements IResourceRepository {
         await this.dbConnection.query('DELETE FROM resources WHERE id = $1', [id]);
     }
 
+    async deleteByTopicId(topicId: string): Promise<void> {
+        await this.dbConnection.query('DELETE FROM resources WHERE topicId = $1', [topicId]);
+    }
+
     async findById(id: string): Promise<Resource | null> {
         const result = await this.dbConnection.query<{ id: string; topicId: string; url: string; description: string; type: string; createdAt: Date }>(
             'SELECT * FROM resources WHERE id = $1',

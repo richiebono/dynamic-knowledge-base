@@ -113,6 +113,24 @@ describe('ResourceRepository', () => {
     verify(dbConnection.query(anything(), anything())).once();
   });
 
+  it('should delete all resources by topic id', async () => {
+    // Arrange
+    const topicId = 'topic-id';
+    when(dbConnection.query(anything(), anything())).thenResolve({ 
+      rows: [],
+      command: 'DELETE',
+      rowCount: 2,
+      oid: 0,
+      fields: [],
+    });
+
+    // Act
+    await repository.deleteByTopicId(topicId);
+
+    // Assert
+    verify(dbConnection.query(anything(), anything())).once();
+  });
+
   it('should find a resource by id', async () => {
     // Arrange
     const resourceId = 'resource-id';

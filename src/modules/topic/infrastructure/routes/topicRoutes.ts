@@ -268,6 +268,30 @@ export class TopicRoutes {
             authMiddleware.checkPermissions(UserRoleEnum.Viewer),
             this.topicController.getAllTopics.bind(this.topicController)
         );
+
+        /**
+         * @swagger
+         * /api/topics/{id}:
+         *   delete:
+         *     summary: Delete a topic
+         *     tags: [Topics]
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         required: true
+         *         schema:
+         *           type: string
+         *     responses:
+         *       204:
+         *         description: Topic deleted successfully
+         *       404:
+         *         description: Topic not found
+         */
+        this.router.delete(
+            '/:id',
+            authMiddleware.checkPermissions(UserRoleEnum.Admin),
+            this.topicController.deleteTopic.bind(this.topicController)
+        );
     }
 
     public getRouter(): Router {
