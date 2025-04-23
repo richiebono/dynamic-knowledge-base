@@ -34,7 +34,7 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(4); // Changed from 3 to 4
+      expect(mockClient.query).toHaveBeenCalledTimes(5); // Changed from 4 to 5
       expect(mockClient.release).toHaveBeenCalled();
       
       const calls = mockClient.query.mock.calls;
@@ -42,6 +42,7 @@ describe('MigrationRunner', () => {
       expect(calls[1][0]).toContain('DO $$');
       expect(calls[2][0]).toContain('CREATE TABLE IF NOT EXISTS topics');
       expect(calls[3][0]).toContain('CREATE TABLE IF NOT EXISTS resources');
+      expect(calls[4][0]).toContain('CREATE TABLE IF NOT EXISTS topic_history');
     });
     
     it('should handle errors during migration', async () => {
@@ -63,13 +64,14 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(3);
+      expect(mockClient.query).toHaveBeenCalledTimes(4); // Changed from 3 to 4
       expect(mockClient.release).toHaveBeenCalled();
       
       const calls = mockClient.query.mock.calls;
       expect(calls[0][0]).toContain('DROP TABLE IF EXISTS resources');
-      expect(calls[1][0]).toContain('DROP TABLE IF EXISTS topics');
-      expect(calls[2][0]).toContain('DROP TABLE IF EXISTS users');
+      expect(calls[1][0]).toContain('DROP TABLE IF EXISTS topic_history');
+      expect(calls[2][0]).toContain('DROP TABLE IF EXISTS topics');
+      expect(calls[3][0]).toContain('DROP TABLE IF EXISTS users');
     });
     
     it('should handle errors during migration reversion', async () => {

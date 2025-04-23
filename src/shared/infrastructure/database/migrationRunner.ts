@@ -58,7 +58,19 @@ export class MigrationRunner {
                 );
             `);
 
-            console.log('Migration applied: Tables "users", "topics", and "resources" created (if not exists).');
+            await client.query(`
+                CREATE TABLE IF NOT EXISTS topic_history (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    topicId UUID REFERENCES topics(id) ON DELETE CASCADE,
+                    name VARCHAR(255) NOT NULL,
+                    content TEXT NOT NULL,
+                    version INT NOT NULL,
+                    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    parentTopicId UUID
+                );
+            `);
+
+            console.log('Migration applied: Tables "users", "topics", "resources", and "topic_history" created (if not exists).');
         } catch (err) {
             console.error('Error applying migration:', err);
             throw err;
@@ -75,6 +87,10 @@ export class MigrationRunner {
             `);
 
             await client.query(`
+                DROP TABLE IF EXISTS topic_history;
+            `);
+
+            await client.query(`
                 DROP TABLE IF EXISTS topics;
             `);
 
@@ -82,7 +98,7 @@ export class MigrationRunner {
                 DROP TABLE IF EXISTS users;
             `);
 
-            console.log('Migration reverted: Tables "users", "topics", and "resources" dropped.');
+            console.log('Migration reverted: Tables "users", "topics", "resources", and "topic_history" dropped.');
         } catch (err) {
             console.error('Error reverting migration:', err);
             throw err;
