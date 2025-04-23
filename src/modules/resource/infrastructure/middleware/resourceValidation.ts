@@ -23,9 +23,9 @@ export class ResourceValidationMiddleware {
                 'any.only': 'Invalid resource type',
                 'any.required': 'Type is required',
             }),
-        topicId: Joi.number().integer().required().messages({
-            'number.base': 'Topic ID must be a number',
-            'number.integer': 'Topic ID must be an integer',
+        topicId: Joi.string().uuid().required().messages({            
+            'string.base': 'Topic ID must be a string',
+            'string.uuid': 'Topic ID must be a valid UUID',
             'any.required': 'Topic ID is required',
         }),
     });
@@ -40,9 +40,9 @@ export class ResourceValidationMiddleware {
                 'string.base': 'Type must be a string',
                 'any.only': 'Invalid resource type',
             }),
-        topicId: Joi.number().integer().optional().messages({
-            'number.base': 'Topic ID must be a number',
-            'number.integer': 'Topic ID must be an integer',
+        topicId: Joi.string().uuid().optional().messages({
+            'string.base': 'Topic ID must be a string',
+            'string.uuid': 'Topic ID must be a valid UUID',
         }),
     });
 

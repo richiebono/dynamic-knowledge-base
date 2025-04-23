@@ -27,7 +27,7 @@ describe('ResourceValidationMiddleware', () => {
         url: 'http://example.com',
         description: 'Test resource',
         type: ResourceType.ARTICLE,
-        topicId: 1,
+        topicId: '123e4567-e89b-12d3-a456-426614174000',
       };
       
       when(req.body).thenReturn(validBody);
@@ -43,7 +43,7 @@ describe('ResourceValidationMiddleware', () => {
       const invalidBody = {
         description: 'Test resource',
         type: ResourceType.ARTICLE,
-        topicId: 1,
+        topicId: '123e4567-e89b-12d3-a456-426614174000',
       };
       
       when(req.body).thenReturn(invalidBody);
@@ -63,7 +63,7 @@ describe('ResourceValidationMiddleware', () => {
         url: 'invalid-url',
         description: 'Test resource',
         type: ResourceType.ARTICLE,
-        topicId: 1,
+        topicId: '123e4567-e89b-12d3-a456-426614174000',
       };
       
       when(req.body).thenReturn(invalidBody);
@@ -82,7 +82,7 @@ describe('ResourceValidationMiddleware', () => {
       const invalidBody = {
         url: 'http://example.com',
         type: ResourceType.ARTICLE,
-        topicId: 1,
+        topicId: '123e4567-e89b-12d3-a456-426614174000',
       };
       
       when(req.body).thenReturn(invalidBody);
@@ -102,7 +102,7 @@ describe('ResourceValidationMiddleware', () => {
         url: 'http://example.com',
         description: 'Test resource',
         type: 'invalid-type',
-        topicId: 1,
+        topicId: '123e4567-e89b-12d3-a456-426614174000',
       };
       
       when(req.body).thenReturn(invalidBody);
@@ -115,14 +115,14 @@ describe('ResourceValidationMiddleware', () => {
       verify(res.status(400)).once();
       verify(res.json(anything())).once();
     });
-    
-    it('should return 400 when topicId is not a number', () => {
+
+    it('should return 400 when topicId is not a valid UUID', () => {
       // Arrange
       const invalidBody = {
         url: 'http://example.com',
         description: 'Test resource',
         type: ResourceType.ARTICLE,
-        topicId: 'not-a-number',
+        topicId: 'not-a-uuid',
       };
       
       when(req.body).thenReturn(invalidBody);
@@ -144,6 +144,7 @@ describe('ResourceValidationMiddleware', () => {
         url: 'http://example.com',
         description: 'Updated resource',
         type: ResourceType.VIDEO,
+        topicId: '123e4567-e89b-12d3-a456-426614174000'
       };
       
       when(req.body).thenReturn(validBody);
@@ -189,6 +190,23 @@ describe('ResourceValidationMiddleware', () => {
       // Arrange
       const invalidBody = {
         type: 'invalid-type',
+      };
+      
+      when(req.body).thenReturn(invalidBody);
+      
+      // Act
+      middleware.validateUpdateResource(instance(req), instance(res), next);
+      
+      // Assert
+      expect(next).not.toHaveBeenCalled();
+      verify(res.status(400)).once();
+      verify(res.json(anything())).once();
+    });
+    
+    it('should return 400 when topicId is not a valid UUID', () => {
+      // Arrange
+      const invalidBody = {
+        topicId: 'not-a-uuid',
       };
       
       when(req.body).thenReturn(invalidBody);

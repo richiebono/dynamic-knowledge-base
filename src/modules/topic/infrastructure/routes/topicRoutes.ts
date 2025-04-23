@@ -41,8 +41,6 @@ export class TopicRoutes {
          *                 type: string
          *               content:
          *                 type: string
-         *               createdBy:
-         *                 type: string
          *               parentTopicId:
          *                 type: string
          *                 nullable: true
@@ -81,8 +79,6 @@ export class TopicRoutes {
          *               name:
          *                 type: string
          *               content:
-         *                 type: string
-         *               updatedBy:
          *                 type: string
          *               parentTopicId:
          *                 type: string

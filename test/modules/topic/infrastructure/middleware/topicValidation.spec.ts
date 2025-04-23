@@ -71,12 +71,12 @@ describe('TopicValidationMiddleware', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    it('should return 400 when parentTopicId is not an integer', () => {
+    it('should return 400 when parentTopicId is not an uuid', () => {
       // Arrange
       const invalidBody = {
         name: 'Valid Topic Name',
         content: 'Valid content',
-        parentTopicId: 'not-an-integer'
+        parentTopicId: '1'
       };
       when(req.body).thenReturn(invalidBody);
 
@@ -87,7 +87,7 @@ describe('TopicValidationMiddleware', () => {
       verify(res.status(400)).once();
       verify(res.json(anything())).once();
       const [jsonArg] = capture(res.json).last();
-      expect(jsonArg.errors).toContainEqual(expect.stringContaining('Parent Topic ID must be an integer'));
+      expect(jsonArg.errors).toContainEqual(expect.stringContaining('must be a valid GUID'));
     });
   });
 
