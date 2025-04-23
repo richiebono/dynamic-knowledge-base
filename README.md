@@ -3,6 +3,23 @@
 ## Overview
 The Knowledge Base Backend is a RESTful API built with Node.js and TypeScript. It is designed to manage a dynamic knowledge base system, enabling users to create, update, and manage interconnected topics and resources. The system supports version control, user roles, and permissions to ensure secure and efficient knowledge management.
 
+## Architectural Decisions
+This project implements a hybrid architecture combining elements from some architectural patterns:
+
+- **Clean Architecture**: Separation of concerns with distinct layers (domain, application, infrastructure).
+- **Domain-Driven Design (DDD)**: Organization around business domains with bounded contexts.
+- **Command Query Responsibility Segregation (CQRS)**: Separation of read and write operations to facilitate potential event-driven implementations in the future.
+
+### Database Connection Strategy
+Each module has its own database connection pool, this design:
+
+1. **Facilitates Future Microservice Extraction**: Modules can be extracted into separate microservices without significant refactoring.
+2. **Supports Database Separation**: Enables individual modules to connect to separate databases if needed for scaling or security purposes.
+3. **Encourages Modularity**: Each module can evolve independently, allowing for different database technologies or configurations.
+
+### IMPORTANT NOTE
+These architectural decisions were made with EDUCATIONAL PURPOSES in mind, demonstrating various software design principles. For production environments, we might want to consider adjusting the approach based on the specific scaling needs and operational complexity.
+
 ## Key Features
 - **Dynamic Knowledge Base**: Manage topics and resources with relationships and version control.
 - **User Roles and Permissions**: Secure access to resources based on user roles.
