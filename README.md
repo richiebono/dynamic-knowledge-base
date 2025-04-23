@@ -243,6 +243,14 @@ You can run the entire application (backend and database) using Docker Compose, 
 > docker-compose -f infra/docker/docker-compose.yml logs -f backend
 > ```
 
+## Important Note About User Registration Security
+
+For testing purposes, the admin permission check on the user registration (POST /users) route is initially commented out. This allows you to create the first admin user without requiring authentication.
+
+**After you have created the initial admin user, you should uncomment the admin permission check in the user registration route (`src/modules/user/infrastructure/routes/userRoutes.ts`) to enforce proper security.**
+
+This ensures that only admin users can register new users in production environments.
+
 ## Contributing
 Contributions are welcome! Please follow these steps:
 1. Fork the repository.

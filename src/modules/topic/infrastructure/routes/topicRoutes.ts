@@ -32,14 +32,25 @@ export class TopicRoutes {
          *         application/json:
          *           schema:
          *             type: object
+         *             required:
+         *               - name
+         *               - content
+         *               - createdBy
          *             properties:
          *               name:
          *                 type: string
-         *               description:
+         *               content:
          *                 type: string
+         *               createdBy:
+         *                 type: string
+         *               parentTopicId:
+         *                 type: string
+         *                 nullable: true
          *     responses:
          *       201:
          *         description: Topic created successfully
+         *       400:
+         *         description: Invalid input
          */
         this.router.post(
             '/',
@@ -69,11 +80,20 @@ export class TopicRoutes {
          *             properties:
          *               name:
          *                 type: string
-         *               description:
+         *               content:
          *                 type: string
+         *               updatedBy:
+         *                 type: string
+         *               parentTopicId:
+         *                 type: string
+         *                 nullable: true
          *     responses:
          *       200:
          *         description: Topic updated successfully
+         *       400:
+         *         description: Invalid input
+         *       404:
+         *         description: Topic not found
          */
         this.router.put(
             '/:id',
@@ -97,6 +117,35 @@ export class TopicRoutes {
          *     responses:
          *       200:
          *         description: Topic retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 id:
+         *                   type: string
+         *                 name:
+         *                   type: string
+         *                 content:
+         *                   type: string
+         *                 createdAt:
+         *                   type: string
+         *                   format: date-time
+         *                 updatedAt:
+         *                   type: string
+         *                   format: date-time
+         *                   nullable: true
+         *                 version:
+         *                   type: integer
+         *                 parentTopicId:
+         *                   type: string
+         *                   nullable: true
+         *                 subTopics:
+         *                   type: array
+         *                   items:
+         *                     $ref: '#/components/schemas/TopicDTO'
+         *       404:
+         *         description: Topic not found
          */
         this.router.get(
             '/:id',
@@ -119,6 +168,12 @@ export class TopicRoutes {
          *     responses:
          *       200:
          *         description: Topic tree retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               $ref: '#/components/schemas/TopicDTO'
+         *       404:
+         *         description: Topic not found
          */
         this.router.get(
             '/tree/:id',
@@ -146,6 +201,14 @@ export class TopicRoutes {
          *     responses:
          *       200:
          *         description: Shortest path retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: array
+         *               items:
+         *                 $ref: '#/components/schemas/TopicDTO'
+         *       404:
+         *         description: Path not found
          */
         this.router.get(
             '/shortest-path/:startId/:endId',
@@ -184,6 +247,21 @@ export class TopicRoutes {
          *     responses:
          *       200:
          *         description: List of topics
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 topics:
+         *                   type: array
+         *                   items:
+         *                     $ref: '#/components/schemas/TopicDTO'
+         *                 total:
+         *                   type: integer
+         *                 limit:
+         *                   type: integer
+         *                 offset:
+         *                   type: integer
          */
         this.router.get(
             '/',
