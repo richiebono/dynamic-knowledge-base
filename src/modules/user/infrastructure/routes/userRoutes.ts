@@ -32,18 +32,30 @@ export class UserRoutes {
          *         application/json:
          *           schema:
          *             type: object
+         *             required:
+         *               - name
+         *               - email
+         *               - password
+         *               - role
          *             properties:
          *               name:
          *                 type: string
          *               email:
          *                 type: string
+         *               password:
+         *                 type: string
+         *                 format: password
+         *               role:
+         *                 type: string
+         *                 enum: [Admin, Editor, Viewer, Contributor]
          *     responses:
          *       201:
          *         description: User created successfully
+         *       400:
+         *         description: Invalid input
          */
         this.router.post(
             '/',
-
             // I Will not validate permission for testing purposes, after create a user we can uncomment next line and remove this comment.
             // authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.userValidationMiddleware.validateCreateUser.bind(this.userValidationMiddleware),
@@ -56,7 +68,6 @@ export class UserRoutes {
          *   put:
          *     summary: Update an existing user
          *     tags: [Users]
-         *     security: []  # Sobrescreve a configuração global de segurança para este endpoint, for testing propose, after create a user we can uncomment this line and remove this comment.
          *     parameters:
          *       - in: path
          *         name: id
@@ -74,9 +85,19 @@ export class UserRoutes {
          *                 type: string
          *               email:
          *                 type: string
+         *               password:
+         *                 type: string
+         *                 format: password
+         *               role:
+         *                 type: string
+         *                 enum: [Admin, Editor, Viewer, Contributor]
          *     responses:
          *       200:
          *         description: User updated successfully
+         *       400:
+         *         description: Invalid input
+         *       404:
+         *         description: User not found
          */
         this.router.put(
             '/:id',
@@ -100,6 +121,25 @@ export class UserRoutes {
          *     responses:
          *       200:
          *         description: User retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 id:
+         *                   type: string
+         *                 name:
+         *                   type: string
+         *                 email:
+         *                   type: string
+         *                 role:
+         *                   type: string
+         *                   enum: [Admin, Editor, Viewer, Contributor]
+         *                 createdAt:
+         *                   type: string
+         *                   format: date-time
+         *       404:
+         *         description: User not found
          */
         this.router.get(
             '/:id',
@@ -138,6 +178,34 @@ export class UserRoutes {
          *     responses:
          *       200:
          *         description: List of users
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 users:
+         *                   type: array
+         *                   items:
+         *                     type: object
+         *                     properties:
+         *                       id:
+         *                         type: string
+         *                       name:
+         *                         type: string
+         *                       email:
+         *                         type: string
+         *                       role:
+         *                         type: string
+         *                         enum: [Admin, Editor, Viewer, Contributor]
+         *                       createdAt:
+         *                         type: string
+         *                         format: date-time
+         *                 total:
+         *                   type: integer
+         *                 limit:
+         *                   type: integer
+         *                 offset:
+         *                   type: integer
          */
         this.router.get(
             '/',
