@@ -245,7 +245,7 @@ You can run the entire application (backend and database) using Docker Compose, 
 
 ## Important Note About User Registration Security
 
-For testing purposes, the admin permission check on the user registration (POST /users) route is initially commented out. This allows you to create the first admin user without requiring authentication.
+For testing purposes, the admin permission check on the user registration (POST /users) route is initially commented out. This allows you to create the first admin user without requiring authentication. I added a test to check if the user is an admin, so if you don't remove the comment, the test will fail.
 
 **After you have created the initial admin user, you should uncomment the admin permission check in the user registration route (`src/modules/user/infrastructure/routes/userRoutes.ts`) to enforce proper security.**
 

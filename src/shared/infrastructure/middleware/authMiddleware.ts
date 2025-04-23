@@ -45,7 +45,15 @@ export class AuthMiddleware {
 
   checkPermissions(requiredRole: UserRoleEnum) {
     return (req: Request, res: Response, next: NextFunction) => {
-      if (!req.user || req.user.role !== requiredRole) {
+      if (!req.user) {
+        return res.status(403).json({ message: 'Insufficient permissions' });
+      }
+      const roleHierarchy = {
+        [UserRoleEnum.Admin]: [UserRoleEnum.Admin, UserRoleEnum.Editor, UserRoleEnum.Viewer],
+        [UserRoleEnum.Editor]: [UserRoleEnum.Editor, UserRoleEnum.Viewer],
+        [UserRoleEnum.Viewer]: [UserRoleEnum.Viewer],
+      };
+      if (!roleHierarchy[req.user.role]?.includes(requiredRole)) {
         return res.status(403).json({ message: 'Insufficient permissions' });
       }
       next();

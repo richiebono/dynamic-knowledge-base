@@ -46,13 +46,15 @@ describe('TopicController', () => {
       const req = { body: createTopicDTO, user: { id: userId } } as any;
       const res = mockResponse();
 
+      mockTopicCommandHandler.createTopic.mockResolvedValueOnce({ id: 'topic-id-1' });
+
       // Act
       await topicController.createTopic(req, res);
 
       // Assert
       expect(mockTopicCommandHandler.createTopic).toHaveBeenCalledWith({ ...createTopicDTO, createdBy: userId });
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Topic created successfully' });
+      expect(res.json).toHaveBeenCalledWith({ message: 'Topic created successfully', data: { id: 'topic-id-1' } });
     });
 
     it('should return 500 when an error occurs', async () => {

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
 import { ITopicQueryHandler } from '@topic/application/interfaces/topicQueryHandler';
-import { CreateTopicDTO } from '@topic/application/DTOs/topicDTO';
+import { CreatedTopicRequestDTO, CreateTopicDTO } from '@topic/application/DTOs/topicDTO';
 
 @injectable()
 export class TopicController {
@@ -20,8 +20,8 @@ export class TopicController {
     public async createTopic(req: Request, res: Response): Promise<void> {
         try {
             const topicDTO = { ...req.body as CreateTopicDTO, createdBy: (req.user as any)?.id };
-            await this.topicCommandHandler.createTopic(topicDTO);
-            res.status(201).json({ message: 'Topic created successfully' });
+            const { id } = await this.topicCommandHandler.createTopic(topicDTO);
+            res.status(201).json({ message: 'Topic created successfully', data: { id } });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on createTopic';
             res.status(500).json({ message: errorMessage });
@@ -31,7 +31,7 @@ export class TopicController {
     public async updateTopic(req: Request, res: Response): Promise<void> {
         try {
             const topicId = req.params.id;
-            const topicDTO = { ...req.body, updatedBy: (req.user as any)?.id };
+            const topicDTO = { ...req.body as CreatedTopicRequestDTO, updatedBy: (req.user as any)?.id };
             await this.topicCommandHandler.updateTopic(topicId, topicDTO);
             res.status(200).json({ message: 'Topic updated successfully' });
         } catch (error) {

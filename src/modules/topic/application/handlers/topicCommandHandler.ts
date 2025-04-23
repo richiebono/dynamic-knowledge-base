@@ -13,8 +13,9 @@ export class TopicCommandHandler implements ITopicCommandHandler {
         @inject(DeleteTopic) private deleteTopicUseCase: DeleteTopic
     ) {}
 
-    async createTopic(createTopicDTO: CreateTopicDTO): Promise<void> {
-        await this.createTopicUseCase.execute(createTopicDTO);
+    async createTopic(createTopicDTO: CreateTopicDTO): Promise<{ id: string }> {
+        const topic = await this.createTopicUseCase.execute(createTopicDTO);
+        return { id: topic.id };
     }
 
     async updateTopic(id: string, updateTopicDTO: UpdateTopicDTO): Promise<void> {
