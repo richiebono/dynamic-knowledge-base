@@ -9,13 +9,16 @@ WORKDIR /usr/src/app
 COPY ../../package*.json ./
 COPY ../../tsconfig.json ./
 
-# Install all dependencies
+# Install all dependencies (including devDependencies for build tools)
 RUN npm install
+
+# Install tsc-alias globally for build
+RUN npm install -g tsc-alias
 
 # Copy source code
 COPY ../../ ./
 
-# Build the application
+# Build the application (tsc + tsc-alias via postbuild script)
 RUN npm run build
 
 # Production stage
