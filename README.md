@@ -292,6 +292,10 @@ You can run the entire application (backend and database) using Docker Compose, 
 > docker-compose -f infra/docker/docker-compose.yml logs -f backend
 > ```
 
+### Note on CI/CD Implementation Status
+
+**Important:** Due to time constraints for delivery, the CI/CD pipeline deployment has not been fully tested in a production environment. However, the GitHub Actions workflow structure and infrastructure directory organization demonstrate my preferred approach to CI/CD implementation and infrastructure management. The provided setup can serve as a solid foundation for implementing a complete CI/CD pipeline in a production environment.
+
 ## Important Note About User Registration Security
 
 For testing purposes, the admin permission check on the user registration (POST /users) route is initially commented out. This allows you to create the first admin user without requiring authentication. I added a test to check if the user is an admin, so if you don't remove the comment, the test will fail.
