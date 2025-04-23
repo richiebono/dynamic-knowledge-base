@@ -17,7 +17,7 @@ export class DeleteTopic {
         
         const childTopics = await this.topicRepository.findByParentId(id);
         if (childTopics.length > 0) {
-            throw new Error(`Cannot delete topic with id ${id} because it ha topics. Delete all child topics first.`);
+            throw new Error(`Cannot delete topic with id ${id} because it has child topics. Delete all child topics first.`);
         }
         
         await this.resourceCommandHandler.deleteResourcesByTopicId(id);
