@@ -7,17 +7,20 @@ services:
       - '3000:3000'
     depends_on:
       - db
+    env_file:
+      - ../../.env.docker
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgres://user:password@db:5432/knowledge_base
+      - NODE_ENV=${NODE_ENV}
 
   db:
     image: postgres:latest
     restart: always
+    env_file:
+      - ../../.env.docker
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: knowledge_base
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
     ports:
       - '5432:5432'
     volumes:

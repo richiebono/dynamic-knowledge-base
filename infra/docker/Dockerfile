@@ -42,6 +42,7 @@ COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy .env file
 COPY ../../.env ./
+COPY ../../.env.docker ./
 COPY ../../infra ./infra
 
 RUN chmod -R +x ./infra/scripts

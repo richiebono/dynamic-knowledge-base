@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+// Carrega o arquivo .env.docker se estiver em ambiente Docker
+const envFile = process.env.NODE_ENV === 'docker' ? '.env.docker' : '.env';
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
 type JwtExpiresIn = '1h' | '2h' | '12h' | '24h' | '7d' | '30d';
 

@@ -13,9 +13,17 @@ declare global {
 
 export class AuthMiddleware {
   validateToken(req: Request, res: Response, next: NextFunction) {
-    
-    const publicRoutes = ['/api/users/login'];
-    if (publicRoutes.includes(req.path)) {
+    const publicEndpoints = [
+      { path: '/users', method: 'POST' },      
+      { path: '/users/login', method: 'POST' } 
+    ];
+
+    const isPublicRoute = publicEndpoints.some(endpoint => 
+      req.originalUrl === endpoint.path && req.method === endpoint.method
+    );
+
+    if (isPublicRoute) {
+      console.log('Public route detected:', req.method, req.originalUrl);
       return next();
     }
 
