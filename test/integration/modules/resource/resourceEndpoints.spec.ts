@@ -13,7 +13,6 @@ describe('Resource API Endpoints', () => {
     await testHelper.initializeApp();
     adminToken = testHelper.generateAuthToken(UserRoleEnum.Admin);
     
-    // Create a topic to associate resources with
     const topicResponse = await testHelper.getRequest()
       .post('/api/topics')
       .set('Authorization', `Bearer ${adminToken}`)
@@ -48,13 +47,11 @@ describe('Resource API Endpoints', () => {
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toHaveProperty('id');
       
-      // Save the created resource ID for later tests
       createdResourceId = response.body.data.id;
     });
     
     it('should return 400 when required fields are missing', async () => {
       const incompleteData = {
-        // Missing required fields
         description: 'Resource with missing fields'
       };
       
@@ -68,7 +65,7 @@ describe('Resource API Endpoints', () => {
     it('should return 400 when URL is invalid', async () => {
       const invalidData = {
         topicId: createdTopicId,
-        url: 'invalid-url', // Invalid URL format
+        url: 'invalid-url',
         description: 'Resource with invalid URL',
         type: ResourceType.ARTICLE
       };

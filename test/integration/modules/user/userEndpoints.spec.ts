@@ -15,7 +15,6 @@ describe('User API Endpoints', () => {
   
   describe('POST /api/users/login', () => {
     it('should register a new user and then login successfully', async () => {
-      // Step 1: Create a user
       const password = 'Test@12345';
       
       const timestamp = new Date().getTime();
@@ -28,7 +27,6 @@ describe('User API Endpoints', () => {
         role: UserRoleEnum.Admin
       };
       
-      // Register user
       await testHelper.getRequest()
         .post('/api/users')
         .send(userData)
@@ -36,7 +34,6 @@ describe('User API Endpoints', () => {
         
       console.log('User created successfully');
 
-      // Step 2: Login with the created user
       const loginData = {
         email: uniqueEmail,
         password: password
@@ -102,7 +99,6 @@ describe('User API Endpoints', () => {
     it('should return a user by ID when authenticated', async () => {
       const token = testHelper.generateAuthToken(UserRoleEnum.Admin);
       
-      // First, get all users to find one ID
       const allUsersResponse = await testHelper.getRequest()
         .get('/api/users')
         .set('Authorization', `Bearer ${token}`)
@@ -126,7 +122,6 @@ describe('User API Endpoints', () => {
         console.log('User deleted successfully');
 
       } else {
-        // Skip this test if no users found
         console.warn('No users found to test GET /api/users/:id endpoint');
       }
     });

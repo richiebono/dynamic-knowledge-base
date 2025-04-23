@@ -59,13 +59,12 @@ describe('GetTopicHistory', () => {
     const result = await getTopicHistory.execute(topicId);
 
     // Assert
-    expect(result).toHaveLength(3); // 2 historical + 1 current
+    expect(result).toHaveLength(3); 
     expect(result).toEqual(expect.arrayContaining([
       { version: 3, createdAt: currentDate },
       { version: 2, createdAt: historyDate1 },
       { version: 1, createdAt: historyDate2 }
     ]));
-    // Check that the result is sorted by version in descending order
     expect(result[0].version).toBe(3);
     expect(result[1].version).toBe(2);
     expect(result[2].version).toBe(1);

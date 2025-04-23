@@ -34,7 +34,7 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(5); // Changed from 4 to 5
+      expect(mockClient.query).toHaveBeenCalledTimes(5);
       expect(mockClient.release).toHaveBeenCalled();
       
       const calls = mockClient.query.mock.calls;
@@ -64,7 +64,7 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(4); // Changed from 3 to 4
+      expect(mockClient.query).toHaveBeenCalledTimes(4);
       expect(mockClient.release).toHaveBeenCalled();
       
       const calls = mockClient.query.mock.calls;

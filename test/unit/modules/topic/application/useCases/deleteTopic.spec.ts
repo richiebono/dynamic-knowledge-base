@@ -80,7 +80,7 @@ describe('DeleteTopic', () => {
     });
 
     when(topicRepository.findById(topicId)).thenResolve(mockTopic);
-    when(topicRepository.findByParentId(topicId)).thenResolve([]); // No child topics
+    when(topicRepository.findByParentId(topicId)).thenResolve([]);
     when(topicRepository.delete(topicId)).thenResolve();
     when(resourceCommandHandler.deleteResourcesByTopicId(topicId)).thenResolve();
 

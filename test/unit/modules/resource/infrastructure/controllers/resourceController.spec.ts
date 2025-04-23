@@ -49,7 +49,6 @@ describe('ResourceController', () => {
         updatedAt: new Date(),
       };
       
-      // Mock createResource to return a complete Resource object
       mockResourceCommandHandler.createResource.mockResolvedValueOnce(resourceDTO);
       
       const req = { body: resourceDTO } as Request;

@@ -68,7 +68,6 @@ export class UserRepository implements IUserRepository {
             id: row.id,
             name: row.name,
             email: row.email,
-            // Use the role value directly from the database as it should match our enum case
             role: row.role as UserRoleEnum,
             password: row.password,
             createdAt: row.createdAt || new Date(),

@@ -4,7 +4,6 @@ import { Application } from 'express';
 import jwt from 'jsonwebtoken';
 import { Pool } from 'pg';
 
-// Usando o novo alias para o app
 import { App } from '@app';
 import { container } from '@shared/infrastructure/ioc/container';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
@@ -12,7 +11,6 @@ import { MigrationRunner } from '@shared/infrastructure/database/migrationRunner
 import { ENV } from '@shared/infrastructure/config/env';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-// Helper class for integration testing
 export class TestHelper {
   private static instance: TestHelper;
   private app: App;
@@ -30,11 +28,9 @@ export class TestHelper {
   }
   
   public async initializeApp(): Promise<void> {
-    // Initialize IoC container
     this.app = container.resolve(App);
     this.expressApp = this.app.getExpressApp();
     
-    // Get database connection
     this.dbConnection = container.get<DbConnection>(DbConnection);
     
     this.pool = new Pool({
@@ -45,7 +41,6 @@ export class TestHelper {
       port: ENV.POSTGRES.PORT,
     });
     
-    // Run migrations
     const migrationRunner = new MigrationRunner(this.pool);
     try {
       await migrationRunner.up();
@@ -57,17 +52,14 @@ export class TestHelper {
   
   public async cleanupApp(): Promise<void> {
     try {
-      // Close database connections
       if (this.pool) {
         await this.pool.end();
       }
       
-      // Ensure any other open connections are closed
       if (this.dbConnection) {
         await this.dbConnection.close();
       }
       
-      // Small delay to ensure connections are properly closed
       await new Promise(resolve => setTimeout(resolve, 100));
     } catch (error) {
       console.error('Error during cleanup:', error);
