@@ -23,7 +23,6 @@ export class AuthMiddleware {
     );
 
     if (isPublicRoute) {
-      console.log('Public route detected:', req.method, req.originalUrl);
       return next();
     }
 

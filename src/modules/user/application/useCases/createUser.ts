@@ -12,12 +12,13 @@ export class CreateUser {
 
     async execute(createUserDTO: CreateUserDTO): Promise<void> {
         const hashedPassword = await bcrypt.hash(createUserDTO.password, 10);
-        
+        const role = createUserDTO.role as UserRoleEnum;
+                
         const user = new User({
             id: uuidv4(),
             name: createUserDTO.name,
             email: createUserDTO.email,
-            role: UserRoleEnum[createUserDTO.role as keyof typeof UserRoleEnum], 
+            role: role,
             password: hashedPassword,
             createdAt: new Date(),
         });

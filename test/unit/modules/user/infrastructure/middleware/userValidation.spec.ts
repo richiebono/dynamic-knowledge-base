@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { UserValidationMiddleware } from '@user/infrastructure/middleware/userValidation';
 import { Request, Response, NextFunction } from 'express';
 import { mock, instance, verify, capture, when, anything } from 'ts-mockito';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 describe('UserValidationMiddleware', () => {
   let userValidationMiddleware: UserValidationMiddleware;
@@ -29,7 +30,7 @@ describe('UserValidationMiddleware', () => {
         name: 'Valid User',
         email: 'valid@example.com',
         password: 'password123',
-        role: 'Admin'
+        role: UserRoleEnum.Admin
       };
       when(req.body).thenReturn(validBody);
 
@@ -45,7 +46,7 @@ describe('UserValidationMiddleware', () => {
       const invalidBody = {
         email: 'valid@example.com',
         password: 'password123',
-        role: 'Admin'
+        role: UserRoleEnum.Admin
       };
       when(req.body).thenReturn(invalidBody);
 
@@ -66,7 +67,7 @@ describe('UserValidationMiddleware', () => {
         name: 'Valid User',
         email: 'not-an-email',
         password: 'password123',
-        role: 'Admin'
+        role: UserRoleEnum.Admin
       };
       when(req.body).thenReturn(invalidBody);
 
@@ -97,7 +98,7 @@ describe('UserValidationMiddleware', () => {
       verify(res.status(400)).once();
       verify(res.json(anything())).once();
       const [jsonArg] = capture(res.json).last();
-      expect(jsonArg.errors).toContainEqual(expect.stringContaining('Role must be Admin, Editor, Viewer, or Contributor'));
+      expect(jsonArg.errors).toContainEqual(expect.stringContaining('Role must be one of the valid user roles'));
       expect(next).not.toHaveBeenCalled();
     });
   });
@@ -108,7 +109,7 @@ describe('UserValidationMiddleware', () => {
       const validBody = {
         name: 'Updated User',
         email: 'updated@example.com',
-        role: 'Editor'
+        role: UserRoleEnum.Editor
       };
       when(req.body).thenReturn(validBody);
 
@@ -164,7 +165,7 @@ describe('UserValidationMiddleware', () => {
       verify(res.status(400)).once();
       verify(res.json(anything())).once();
       const [jsonArg] = capture(res.json).last();
-      expect(jsonArg.errors).toContainEqual(expect.stringContaining('Role must be Admin, Editor, Viewer, or Contributor'));
+      expect(jsonArg.errors).toContainEqual(expect.stringContaining('Role must be one of the valid user roles'));
     });
   });
 });

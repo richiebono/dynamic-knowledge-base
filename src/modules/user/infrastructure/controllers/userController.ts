@@ -24,7 +24,7 @@ export class UserController {
             await this.userCommandHandler.createUser(userDTO);
             res.status(201).json({ message: 'User created successfully' });
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on createUser';
+            console.error("User creation error:", error); console.error("User creation error:", error); console.error("User creation error:", error); const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on createUser';
             res.status(500).json({ message: errorMessage });
         }
     }

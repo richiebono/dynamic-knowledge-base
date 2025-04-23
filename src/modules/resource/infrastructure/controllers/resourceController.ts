@@ -19,8 +19,11 @@ export class ResourceController {
     public async createResource(req: Request, res: Response): Promise<void> {
         try {
             const resourceDTO = req.body;
-            await this.resourceCommandHandler.createResource(resourceDTO);
-            res.status(201).json({ message: 'Resource created successfully' });
+            const createdResource = await this.resourceCommandHandler.createResource(resourceDTO);
+            res.status(201).json({ 
+                message: 'Resource created successfully',
+                data: { id: createdResource.id }
+            });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on createResource';
             res.status(500).json({ message: errorMessage });

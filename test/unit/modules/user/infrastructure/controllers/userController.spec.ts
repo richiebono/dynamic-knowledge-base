@@ -2,6 +2,7 @@ import { UserController } from '@user/infrastructure/controllers/userController'
 import { IUserCommandHandler } from '@user/application/interfaces/userCommandHandler';
 import { IUserQueryHandler } from '@user/application/interfaces/userQueryHandler';
 import { Request, Response } from 'express';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 const mockUserCommandHandler: jest.Mocked<IUserCommandHandler> = {
     createUser: jest.fn(),
@@ -107,7 +108,7 @@ describe('UserController', () => {
                 id: '1',
                 name: 'Test User',
                 email: 'test@example.com',
-                role: 'user',
+                role: UserRoleEnum.Viewer,
                 createdAt: new Date(),
             });
             const req = { params: { id: '1' } } as any;
@@ -118,7 +119,7 @@ describe('UserController', () => {
                 id: '1',
                 name: 'Test User',
                 email: 'test@example.com',
-                role: 'user',
+                role: UserRoleEnum.Viewer,
                 createdAt: expect.any(Date),
             });
         });

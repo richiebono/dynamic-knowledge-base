@@ -49,6 +49,9 @@ describe('ResourceController', () => {
         updatedAt: new Date(),
       };
       
+      // Mock createResource to return a complete Resource object
+      mockResourceCommandHandler.createResource.mockResolvedValueOnce(resourceDTO);
+      
       const req = { body: resourceDTO } as Request;
       const res = mockResponse();
       
@@ -58,7 +61,10 @@ describe('ResourceController', () => {
       // Assert
       expect(mockResourceCommandHandler.createResource).toHaveBeenCalledWith(resourceDTO);
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Resource created successfully' });
+      expect(res.json).toHaveBeenCalledWith({ 
+        message: 'Resource created successfully',
+        data: { id: 'resource-id' }
+      });
     });
     
     it('should return 500 when an error occurs', async () => {

@@ -1,10 +1,11 @@
 import { inject, injectable } from 'inversify';
-import { IResourceCommandHandler } from '../interfaces/resourceCommandHandler';
-import { CreateResource } from '../useCases/createResource';
-import { UpdateResource } from '../useCases/updateResource';
-import { DeleteResource } from '../useCases/deleteResource';
-import { DeleteResourcesByTopicId } from '../useCases/deleteResourcesByTopicId';
-import { ResourceDTO } from '../DTOs/resourceDTO';
+import { IResourceCommandHandler } from '@resource/application/interfaces/resourceCommandHandler';
+import { CreateResource } from '@resource/application/useCases/createResource';
+import { UpdateResource } from '@resource/application/useCases/updateResource';
+import { DeleteResource } from '@resource/application/useCases/deleteResource';
+import { DeleteResourcesByTopicId } from '@resource/application/useCases/deleteResourcesByTopicId';
+import { ResourceDTO } from '@resource/application/DTOs/resourceDTO';
+import { Resource } from '@resource/domain/entities/resource';
 
 
 @injectable()
@@ -17,8 +18,8 @@ export class ResourceCommandHandler implements IResourceCommandHandler {
     ) {}
     
 
-    public async createResource(dto: ResourceDTO): Promise<void> {
-        await this.createResourceUseCase.execute(dto);
+    public async createResource(dto: ResourceDTO): Promise<Resource> {
+        return await this.createResourceUseCase.execute(dto);
     }
 
     public async updateResource(id: string, dto: ResourceDTO): Promise<void> {

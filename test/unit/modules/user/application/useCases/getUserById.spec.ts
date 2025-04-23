@@ -50,7 +50,7 @@ describe('GetUserById', () => {
     expect(result?.id).toBe(userId);
     expect(result?.name).toBe(mockUser.name);
     expect(result?.email).toBe(mockUser.email);
-    expect(result?.role).toBe(UserRoleEnum.Viewer.toString());
+    expect(result?.role).toBe(UserRoleEnum.Viewer);
     expect(result?.createdAt).toBe(mockUser.createdAt);
     expect(result).not.toHaveProperty('password');
   });

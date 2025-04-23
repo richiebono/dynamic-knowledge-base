@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { container } from '@shared/infrastructure/ioc/container';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { ErrorHandler } from '@shared/infrastructure/middleware/errorHandler';
-import { MigrationRunner } from '@shared/infrastructure/database/migrationRunner';
 
 describe('IoC Container', () => {
   it('should resolve AuthMiddleware', () => {

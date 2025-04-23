@@ -17,7 +17,7 @@ export class GetUserById {
             id: user.id,
             name: user.name,
             email: user.email,
-            role: user.role.toString(),
+            role: user.role,
             createdAt: user.createdAt,
         };
     }

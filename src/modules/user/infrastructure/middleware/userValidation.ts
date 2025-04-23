@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 import { injectable } from 'inversify';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 @injectable()
 export class UserValidationMiddleware {
@@ -20,10 +21,10 @@ export class UserValidationMiddleware {
             'string.min': 'Password must be at least 6 characters',
         }),
         role: Joi.string()
-            .valid('Admin', 'Editor', 'Viewer', 'Contributor')
+            .valid(UserRoleEnum.Admin, UserRoleEnum.Editor, UserRoleEnum.Viewer)
             .required()
             .messages({
-                'any.only': 'Role must be Admin, Editor, Viewer, or Contributor',
+                'any.only': 'Role must be one of the valid user roles',
                 'string.empty': 'Role is required',
                 'any.required': 'Role is required',
             }),
@@ -36,10 +37,10 @@ export class UserValidationMiddleware {
             'string.min': 'Password must be at least 6 characters',
         }),
         role: Joi.string()
-            .valid('Admin', 'Editor', 'Viewer', 'Contributor')
+            .valid(UserRoleEnum.Admin, UserRoleEnum.Editor, UserRoleEnum.Viewer)
             .optional()
             .messages({
-                'any.only': 'Role must be Admin, Editor, Viewer, or Contributor',
+                'any.only': 'Role must be one of the valid user roles',
             }),
     });
 

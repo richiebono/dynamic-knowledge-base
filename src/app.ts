@@ -63,6 +63,11 @@ export class App {
         this.app.use(this.errorHandler.handle);
     }
 
+    // Expose Express app for testing
+    public getExpressApp(): Application {
+        return this.app;
+    }
+
     public async start(port: number) {
         try {           
             await this.dbConnection.query('SELECT 1');

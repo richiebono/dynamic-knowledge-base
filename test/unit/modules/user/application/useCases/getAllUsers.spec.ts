@@ -71,14 +71,14 @@ describe('GetAllUsers', () => {
     expect(result[0].id).toBe(mockUsers[0].id);
     expect(result[0].name).toBe(mockUsers[0].name);
     expect(result[0].email).toBe(mockUsers[0].email);
-    expect(result[0].role).toBe(UserRoleEnum.Admin.toString());
+    expect(result[0].role).toBe(UserRoleEnum.Admin);
     expect(result[0].createdAt).toBe(mockUsers[0].createdAt);
     expect(result[0]).not.toHaveProperty('password');
     
     expect(result[1].id).toBe(mockUsers[1].id);
     expect(result[1].name).toBe(mockUsers[1].name);
     expect(result[1].email).toBe(mockUsers[1].email);
-    expect(result[1].role).toBe(UserRoleEnum.Viewer.toString());
+    expect(result[1].role).toBe(UserRoleEnum.Viewer);
     expect(result[1].createdAt).toBe(mockUsers[1].createdAt);
     expect(result[1]).not.toHaveProperty('password');
   });

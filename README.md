@@ -110,10 +110,59 @@ http://localhost:3000/swagger
 ```
 
 ## Testing
-Unit and integration tests are organized by module in the `test` directory. To run tests, use:
+The project includes unit and integration tests organized by module in the `test` directory. Below are the available commands for test execution:
+
+### Running Tests
+
+#### All Tests
 ```bash
-npm run test
+npm test
 ```
+
+#### Unit Tests Only
+```bash
+npm run test:unit
+```
+
+#### Integration Tests Only
+```bash
+npm run test:integration
+```
+
+### Code Coverage
+
+To generate code coverage reports, you can use the following commands:
+
+#### Coverage for All Tests
+```bash
+npm run test:coverage
+```
+
+#### Coverage for Unit Tests
+```bash
+npm run test:unit:coverage
+```
+
+#### Coverage for Integration Tests
+```bash
+npm run test:integration:coverage
+```
+
+The coverage report will be generated in the `coverage` folder and includes:
+- General coverage statistics
+- Detailed file-by-file view
+- HTML report for visual analysis (available at `coverage/lcov-report/index.html`)
+
+### Test Structure
+
+- **Unit Tests**: Located in `test/modules/` and `test/shared/`, following the same structure as the source code and testing components in isolation.
+- **Integration Tests**: Located in `test/integration/modules/`, testing the integration between multiple components and the exposed APIs.
+
+The test structure follows best practices with:
+- Isolated environment setup for integration tests
+- Use of mocks and stubs to isolate external dependencies
+- Authentication and permission checks
+- Validation of complete business flows
 
 ## CI/CD Pipeline
 The project includes a GitHub Actions workflow for CI/CD:

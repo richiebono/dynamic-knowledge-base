@@ -5,6 +5,7 @@ import { GetAllUsers } from '@user/application/useCases/getAllUsers';
 import { GetTotalUsersCount } from '@user/application/useCases/getTotalUsersCount';
 import { UserDTO } from '@user/application/DTOs/userDTO';
 import { mock, instance, when, verify } from 'ts-mockito';
+import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
 describe('UserQueryHandler', () => {
   let getUserById: GetUserById;
@@ -32,7 +33,7 @@ describe('UserQueryHandler', () => {
         id: userId,
         name: 'Test User',
         email: 'test@example.com',
-        role: 'Viewer',
+        role: UserRoleEnum.Viewer,
         createdAt: new Date()
       };
       
@@ -73,7 +74,7 @@ describe('UserQueryHandler', () => {
           id: 'user-1',
           name: 'User One',
           email: 'one@example.com',
-          role: 'Admin',
+          role: UserRoleEnum.Admin,
           createdAt: new Date()
         }
       ];
