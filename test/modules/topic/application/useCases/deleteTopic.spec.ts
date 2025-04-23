@@ -27,6 +27,45 @@ describe('DeleteTopic', () => {
     verify(resourceCommandHandler.deleteResourcesByTopicId(topicId)).never();
   });
 
+  it('should throw error if topic has child topics', async () => {
+    // Arrange
+    const topicId = 'parent-topic-id';
+    const mockTopic = new Topic({
+      id: topicId,
+      name: 'Parent Topic',
+      content: 'Parent Content',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      version: 1,
+      parentTopicId: undefined,
+    });
+
+    const childTopics = [
+      new Topic({
+        id: 'child-topic-id',
+        name: 'Child Topic',
+        content: 'Child Content',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        version: 1,
+        parentTopicId: topicId,
+      })
+    ];
+
+    when(topicRepository.findById(topicId)).thenResolve(mockTopic);
+    when(topicRepository.findByParentId(topicId)).thenResolve(childTopics);
+
+    // Act & Assert
+    await expect(deleteTopic.execute(topicId)).rejects.toThrow(
+      `Cannot delete topic with id ${topicId} because it has child topics. Delete all child topics first.`
+    );
+    
+    verify(topicRepository.findById(topicId)).once();
+    verify(topicRepository.findByParentId(topicId)).once();
+    verify(resourceCommandHandler.deleteResourcesByTopicId(topicId)).never();
+    verify(topicRepository.delete(topicId)).never();
+  });
+
   it('should delete a topic and its associated resources if it exists', async () => {
     // Arrange
     const topicId = 'existing-id';
@@ -41,6 +80,7 @@ describe('DeleteTopic', () => {
     });
 
     when(topicRepository.findById(topicId)).thenResolve(mockTopic);
+    when(topicRepository.findByParentId(topicId)).thenResolve([]); // No child topics
     when(topicRepository.delete(topicId)).thenResolve();
     when(resourceCommandHandler.deleteResourcesByTopicId(topicId)).thenResolve();
 
@@ -49,6 +89,7 @@ describe('DeleteTopic', () => {
 
     // Assert
     verify(topicRepository.findById(topicId)).once();
+    verify(topicRepository.findByParentId(topicId)).once();
     verify(resourceCommandHandler.deleteResourcesByTopicId(topicId)).once();
     verify(topicRepository.delete(topicId)).once();
   });
