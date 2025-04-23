@@ -7,36 +7,29 @@ import { mock, instance, verify, when } from 'ts-mockito';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-jest.mock('express', () => {
-  const mockRouter = {
-    get: jest.fn().mockReturnThis(),
-    post: jest.fn().mockReturnThis(),
-    put: jest.fn().mockReturnThis(),
-    delete: jest.fn().mockReturnThis()
-  };
-  
-  return {
-    Router: jest.fn(() => mockRouter)
-  };
-});
+const mockRouter = {
+  get: jest.fn().mockReturnThis(),
+  post: jest.fn().mockReturnThis(),
+  put: jest.fn().mockReturnThis(),
+  delete: jest.fn().mockReturnThis()
+};
 
-jest.mock('@shared/infrastructure/middleware/authMiddleware', () => {
-  const mockCheckPermissions = jest.fn(() => jest.fn());
-  
-  return {
-    AuthMiddleware: jest.fn().mockImplementation(() => {
-      return {
-        checkPermissions: mockCheckPermissions
-      };
-    })
-  };
-});
+jest.mock('express', () => ({
+  Router: jest.fn(() => mockRouter)
+}));
+
+const mockCheckPermissions = jest.fn(() => jest.fn());
+
+jest.mock('@shared/infrastructure/middleware/authMiddleware', () => ({
+  AuthMiddleware: jest.fn().mockImplementation(() => ({
+    checkPermissions: mockCheckPermissions
+  }))
+}));
 
 describe('TopicRoutes', () => {
   let topicController: TopicController;
   let validationMiddleware: TopicValidationMiddleware;
   let topicRoutes: TopicRoutes;
-  let mockRouter: any;
   
   beforeEach(() => {
     topicController = mock(TopicController);
@@ -48,8 +41,6 @@ describe('TopicRoutes', () => {
       instance(topicController),
       instance(validationMiddleware)
     );
-    
-    mockRouter = (Router as jest.Mock)();
   });
   
   it('should initialize routes', () => {
@@ -61,8 +52,7 @@ describe('TopicRoutes', () => {
   
   it('should set up POST / route with admin permissions', () => {
     // Assert
-    const authMiddleware = new AuthMiddleware();
-    expect(authMiddleware.checkPermissions).toHaveBeenCalledWith(UserRoleEnum.Admin);
+    expect(mockCheckPermissions).toHaveBeenCalledWith(UserRoleEnum.Admin);
     expect(mockRouter.post).toHaveBeenCalledWith(
       '/',
       expect.any(Function), 
@@ -73,8 +63,7 @@ describe('TopicRoutes', () => {
   
   it('should set up GET / route with viewer permissions', () => {
     // Assert
-    const authMiddleware = new AuthMiddleware();
-    expect(authMiddleware.checkPermissions).toHaveBeenCalledWith(UserRoleEnum.Viewer);
+    expect(mockCheckPermissions).toHaveBeenCalledWith(UserRoleEnum.Viewer);
     
     expect(mockRouter.get).toHaveBeenCalledWith(
       '/',

@@ -2,6 +2,7 @@
 import './paths';
 import 'reflect-metadata';
 import express, { Application } from 'express';
+import cors from 'cors';
 import { inject, injectable } from 'inversify';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
@@ -30,12 +31,33 @@ export class App {
     }
 
     private initializeMiddlewares() {
+        // Configure CORS to allow requests from all origins
+        this.app.use(cors({
+            origin: true, // Allow all origins with credentials
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true
+        }));
+        
         this.app.use(express.json());
         setupSwagger(this.app);
         this.app.use(this.authMiddleware.validateToken);          
     }
 
     private initializeRoutes() {
+        // Add an OPTIONS route handler for preflight requests
+        this.app.options('*', cors());
+        
+        // Add health check endpoint
+        this.app.get('/health', (req, res) => {
+            res.status(200).json({ status: 'ok' });
+        });
+        
+        // Add base route to redirect to swagger
+        this.app.get('/', (req, res) => {
+            res.redirect('/swagger');
+        });
+        
         this.app.use('/api/topics', this.topicRoutes.getRouter());
         this.app.use('/api/resources', this.resourceRoutes.getRouter());
         this.app.use('/api/users', this.userRoutes.getRouter());

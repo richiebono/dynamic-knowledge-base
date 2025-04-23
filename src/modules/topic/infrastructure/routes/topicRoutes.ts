@@ -22,7 +22,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics:
+         * /api/topics:
          *   post:
          *     summary: Create a new topic
          *     tags: [Topics]
@@ -61,7 +61,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics/{id}:
+         * /api/topics/{id}:
          *   put:
          *     summary: Update an existing topic
          *     tags: [Topics]
@@ -104,7 +104,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics/{id}:
+         * /api/topics/{id}:
          *   get:
          *     summary: Get a topic by ID
          *     tags: [Topics]
@@ -155,7 +155,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics/tree/{id}:
+         * /api/topics/tree/{id}:
          *   get:
          *     summary: Get the topic tree
          *     tags: [Topics]
@@ -183,7 +183,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics/shortest-path/{startId}/{endId}:
+         * /api/topics/shortest-path/{startId}/{endId}:
          *   get:
          *     summary: Find the shortest path between two topics
          *     tags: [Topics]
@@ -218,7 +218,7 @@ export class TopicRoutes {
 
         /**
          * @swagger
-         * /topics:
+         * /api/topics:
          *   get:
          *     summary: Get all topics
          *     tags: [Topics]

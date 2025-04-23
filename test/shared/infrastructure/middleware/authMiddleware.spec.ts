@@ -26,7 +26,12 @@ describe('AuthMiddleware', () => {
 
   describe('validateToken', () => {
     it('should call next() for public routes', () => {
-      req = { ...req, path: '/api/users/login' };
+      req = { 
+        ...req, 
+        path: '/api/users/login', 
+        originalUrl: '/api/users/login', 
+        method: 'POST'
+      };
       authMiddleware.validateToken(req as Request, res as Response, next);
       expect(next).toHaveBeenCalled();
     });

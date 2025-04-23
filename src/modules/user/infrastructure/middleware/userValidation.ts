@@ -14,11 +14,16 @@ export class UserValidationMiddleware {
             'string.empty': 'Email is required',
             'any.required': 'Email is required',
         }),
+        password: Joi.string().required().min(6).messages({
+            'string.empty': 'Password is required',
+            'any.required': 'Password is required',
+            'string.min': 'Password must be at least 6 characters',
+        }),
         role: Joi.string()
-            .valid('Admin', 'Editor', 'Viewer')
+            .valid('Admin', 'Editor', 'Viewer', 'Contributor')
             .required()
             .messages({
-                'any.only': 'Role must be Admin, Editor, or Viewer',
+                'any.only': 'Role must be Admin, Editor, Viewer, or Contributor',
                 'string.empty': 'Role is required',
                 'any.required': 'Role is required',
             }),
@@ -27,11 +32,14 @@ export class UserValidationMiddleware {
     private updateUserSchema = Joi.object({
         name: Joi.string().optional(),
         email: Joi.string().email().optional(),
+        password: Joi.string().optional().min(6).messages({
+            'string.min': 'Password must be at least 6 characters',
+        }),
         role: Joi.string()
-            .valid('Admin', 'Editor', 'Viewer')
+            .valid('Admin', 'Editor', 'Viewer', 'Contributor')
             .optional()
             .messages({
-                'any.only': 'Role must be Admin, Editor, or Viewer',
+                'any.only': 'Role must be Admin, Editor, Viewer, or Contributor',
             }),
     });
 

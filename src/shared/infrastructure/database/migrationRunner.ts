@@ -12,10 +12,27 @@ export class MigrationRunner {
                     name VARCHAR(255) NOT NULL,
                     email VARCHAR(255) UNIQUE NOT NULL,
                     password VARCHAR(255) NOT NULL,
-                    role VARCHAR(50) NOT NULL CHECK (role IN ('ADMIN', 'USER', 'MODERATOR')),
+                    role VARCHAR(50) NOT NULL CHECK (role IN ('ADMIN', 'EDITOR', 'VIEWER')),
                     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
+            `);
+
+            // Para tabelas já existentes, atualizamos a constraint
+            await client.query(`
+                DO $$
+                BEGIN
+                    -- Verifica se a tabela users existe
+                    IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'users') THEN
+                        -- Remove a constraint existente, se houver
+                        IF EXISTS (SELECT FROM pg_constraint WHERE conname = 'users_role_check') THEN
+                            ALTER TABLE users DROP CONSTRAINT users_role_check;
+                        END IF;
+                        
+                        -- Adiciona a nova constraint
+                        ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('Admin', 'Editor', 'Viewer'));
+                    END IF;
+                END $$;
             `);
 
             await client.query(`

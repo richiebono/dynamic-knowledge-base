@@ -10,17 +10,22 @@ export class UserRepository implements IUserRepository {
     constructor(@inject(UserDbConnection) private dbConnection: UserDbConnection) {}
      
     async create(user: User): Promise<User> {
+        const roleValue = user.role.toUpperCase();
+        
         const result = await this.dbConnection.query<{ id: string; name: string; email: string; role: string; password: string; createdAt: Date }>(
             'INSERT INTO users (name, email, role, password, createdAt) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role, password, createdAt',
-            [user.name, user.email, user.role, user.password, user.createdAt]
+            [user.name, user.email, roleValue, user.password, user.createdAt]
         );
         return this.mapToUser(result.rows[0]);
     }
 
     async update(user: User): Promise<User> {
+        // Convert the role to lowercase to match database constraints
+        const roleValue = user.role.toLowerCase();
+        
         const result = await this.dbConnection.query<{ id: string; name: string; email: string; role: string; password: string; updatedAt: Date }>(
             'UPDATE users SET name = $1, email = $2, role = $3, password = COALESCE($4, password), updatedAt = $5 WHERE id = $6 RETURNING id, name, email, role, password, updatedAt',
-            [user.name, user.email, user.role, user.password, user.updatedAt, user.id]
+            [user.name, user.email, roleValue, user.password, user.updatedAt, user.id]
         );
         return this.mapToUser(result.rows[0]);
     }
@@ -66,7 +71,8 @@ export class UserRepository implements IUserRepository {
             id: row.id,
             name: row.name,
             email: row.email,
-            role: row.role as UserRoleEnum,
+            // Convert database role (likely lowercase) to match our enum case
+            role: row.role.charAt(0).toUpperCase() + row.role.slice(1) as UserRoleEnum,
             password: row.password,
             createdAt: row.createdAt || new Date(),
             updatedAt: row.updatedAt,

@@ -22,7 +22,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources:
+         * /api/resources:
          *   post:
          *     summary: Create a new resource
          *     tags: [Resources]
@@ -61,7 +61,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources/{id}:
+         * /api/resources/{id}:
          *   put:
          *     summary: Update an existing resource
          *     tags: [Resources]
@@ -101,7 +101,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources/{id}:
+         * /api/resources/{id}:
          *   get:
          *     summary: Get a resource by ID
          *     tags: [Resources]
@@ -147,7 +147,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources/topic/{topicId}:
+         * /api/resources/topic/{topicId}:
          *   get:
          *     summary: Get all resources for a specific topic
          *     tags: [Resources]
@@ -193,7 +193,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources:
+         * /api/resources:
          *   get:
          *     summary: Get all resources
          *     tags: [Resources]
@@ -264,7 +264,7 @@ export class ResourceRoutes {
 
         /**
          * @swagger
-         * /resources/{id}:
+         * /api/resources/{id}:
          *   delete:
          *     summary: Delete a resource by ID
          *     tags: [Resources]

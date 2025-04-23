@@ -22,10 +22,11 @@ export class UserRoutes {
 
         /**
          * @swagger
-         * /users:
+         * /api/users:
          *   post:
          *     summary: Create a new user
          *     tags: [Users]
+         *     security: []  # Line added for testing purposes, remove this after create an admin user
          *     requestBody:
          *       required: true
          *       content:
@@ -64,7 +65,7 @@ export class UserRoutes {
 
         /**
          * @swagger
-         * /users/{id}:
+         * /api/users/{id}:
          *   put:
          *     summary: Update an existing user
          *     tags: [Users]
@@ -108,7 +109,7 @@ export class UserRoutes {
 
         /**
          * @swagger
-         * /users/{id}:
+         * /api/users/{id}:
          *   get:
          *     summary: Get a user by ID
          *     tags: [Users]
@@ -149,7 +150,7 @@ export class UserRoutes {
 
         /**
          * @swagger
-         * /users:
+         * /api/users:
          *   get:
          *     summary: Get all users
          *     tags: [Users]
@@ -215,7 +216,7 @@ export class UserRoutes {
 
         /**
          * @swagger
-         * /users/login:
+         * /api/users/login:
          *   post:
          *     summary: Authenticate user and get token
          *     tags: [Users]

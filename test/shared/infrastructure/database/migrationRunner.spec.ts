@@ -34,13 +34,14 @@ describe('MigrationRunner', () => {
       
       // Assert
       expect(mockPool.connect).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledTimes(3);
+      expect(mockClient.query).toHaveBeenCalledTimes(4); // Changed from 3 to 4
       expect(mockClient.release).toHaveBeenCalled();
       
       const calls = mockClient.query.mock.calls;
       expect(calls[0][0]).toContain('CREATE TABLE IF NOT EXISTS users');
-      expect(calls[1][0]).toContain('CREATE TABLE IF NOT EXISTS topics');
-      expect(calls[2][0]).toContain('CREATE TABLE IF NOT EXISTS resources');
+      expect(calls[1][0]).toContain('DO $$');
+      expect(calls[2][0]).toContain('CREATE TABLE IF NOT EXISTS topics');
+      expect(calls[3][0]).toContain('CREATE TABLE IF NOT EXISTS resources');
     });
     
     it('should handle errors during migration', async () => {

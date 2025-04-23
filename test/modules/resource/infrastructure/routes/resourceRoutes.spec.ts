@@ -2,45 +2,40 @@ import 'reflect-metadata';
 import { ResourceRoutes } from '@resource/infrastructure/routes/resourceRoutes';
 import { ResourceController } from '@resource/infrastructure/controllers/resourceController';
 import { ResourceValidationMiddleware } from '@resource/infrastructure/middleware/resourceValidation';
-import { Router } from 'express';
-import { mock, instance, verify, when, capture } from 'ts-mockito';
-import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
+import { instance, mock } from 'ts-mockito';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
-jest.mock('express', () => {
-  const mockRouter = {
-    post: jest.fn().mockReturnThis(),
-    put: jest.fn().mockReturnThis(),
-    get: jest.fn().mockReturnThis(),
-    delete: jest.fn().mockReturnThis(),
-  };
-  return {
-    Router: jest.fn(() => mockRouter),
-  };
-});
+const mockRouter = {
+  post: jest.fn().mockReturnThis(),
+  put: jest.fn().mockReturnThis(),
+  get: jest.fn().mockReturnThis(),
+  delete: jest.fn().mockReturnThis(),
+};
+
+let routerInstance = mockRouter;
+
+jest.mock('express', () => ({
+  Router: jest.fn(() => routerInstance)
+}));
 
 const mockCheckPermissions = jest.fn().mockReturnValue(jest.fn());
-jest.mock('@shared/infrastructure/middleware/authMiddleware', () => {
-  return {
-    AuthMiddleware: jest.fn().mockImplementation(() => ({
-      checkPermissions: mockCheckPermissions
-    })),
-  };
-});
+jest.mock('@shared/infrastructure/middleware/authMiddleware', () => ({
+  AuthMiddleware: jest.fn().mockImplementation(() => ({
+    checkPermissions: mockCheckPermissions
+  }))
+}));
 
 describe('ResourceRoutes', () => {
   let resourceController: ResourceController;
   let resourceValidationMiddleware: ResourceValidationMiddleware;
-  let router: Router;
   let resourceRoutes: ResourceRoutes;
   
   beforeEach(() => {
+    jest.clearAllMocks();
+    
+    routerInstance = mockRouter;
     resourceController = mock<ResourceController>();
     resourceValidationMiddleware = mock<ResourceValidationMiddleware>();
-    
-    jest.clearAllMocks();
-    router = Router();
-    
     resourceRoutes = new ResourceRoutes(
       instance(resourceController),
       instance(resourceValidationMiddleware)
@@ -48,10 +43,10 @@ describe('ResourceRoutes', () => {
   });
   
   it('should initialize all routes', () => {
-    expect(router.post).toHaveBeenCalledTimes(1);
-    expect(router.put).toHaveBeenCalledTimes(1);
-    expect(router.get).toHaveBeenCalledTimes(3);
-    expect(router.delete).toHaveBeenCalledTimes(1);
+    expect(mockRouter.post).toHaveBeenCalledTimes(1);
+    expect(mockRouter.put).toHaveBeenCalledTimes(1);
+    expect(mockRouter.get).toHaveBeenCalledTimes(3);
+    expect(mockRouter.delete).toHaveBeenCalledTimes(1);
   });
   
   it('should apply authentication middleware with proper roles', () => {
@@ -73,6 +68,6 @@ describe('ResourceRoutes', () => {
   
   it('should return router instance when getRouter is called', () => {
     const returnedRouter = resourceRoutes.getRouter();
-    expect(returnedRouter).toBe(router);
+    expect(returnedRouter).toBe(routerInstance);
   });
 });
