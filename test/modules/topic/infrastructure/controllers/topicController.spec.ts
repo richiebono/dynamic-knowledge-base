@@ -16,6 +16,8 @@ const mockTopicQueryHandler: jest.Mocked<ITopicQueryHandler> = {
   getTopicById: jest.fn(),
   getTopicTree: jest.fn(),
   findShortestPath: jest.fn(),
+  getTopicVersion: jest.fn(),
+  getTopicHistory: jest.fn(),
 } as any;
 
 const mockResponse = () => {
@@ -249,6 +251,141 @@ describe('TopicController', () => {
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(topicsResponse);
+    });
+  });
+
+  describe('getTopicVersion', () => {
+    it('should return 200 with topic version when found', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const version = 1;
+      const topicDTO: TopicDTO = {
+        id: topicId,
+        name: 'Test Topic Version 1',
+        content: 'Test Content Version 1',
+        createdAt: new Date(),
+        version: version,
+        parentTopicId: undefined
+      };
+      
+      mockTopicQueryHandler.getTopicVersion.mockResolvedValueOnce(topicDTO);
+      const req = { params: { id: topicId, version: version.toString() } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicVersion(req, res);
+
+      // Assert
+      expect(mockTopicQueryHandler.getTopicVersion).toHaveBeenCalledWith(topicId, version);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(topicDTO);
+    });
+
+    it('should return 400 when version is invalid', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const invalidVersion = 'invalid';
+      const req = { params: { id: topicId, version: invalidVersion } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicVersion(req, res);
+
+      // Assert
+      expect(mockTopicQueryHandler.getTopicVersion).not.toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ message: 'Invalid version number' });
+    });
+
+    it('should return 404 when topic version is not found', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const version = 2;
+      const errorMessage = 'Version 2 not found for topic topic-id';
+      mockTopicQueryHandler.getTopicVersion.mockRejectedValueOnce(new Error(errorMessage));
+      const req = { params: { id: topicId, version: version.toString() } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicVersion(req, res);
+
+      // Assert
+      expect(mockTopicQueryHandler.getTopicVersion).toHaveBeenCalledWith(topicId, version);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
+    });
+
+    it('should return 500 when an error occurs', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const version = 1;
+      const errorMessage = 'Error fetching topic version';
+      mockTopicQueryHandler.getTopicVersion.mockRejectedValueOnce(new Error(errorMessage));
+      const req = { params: { id: topicId, version: version.toString() } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicVersion(req, res);
+
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
+    });
+  });
+
+  describe('getTopicHistory', () => {
+    it('should return 200 with topic history when found', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const history = [
+        { version: 1, createdAt: new Date('2025-04-01') },
+        { version: 2, createdAt: new Date('2025-04-15') }
+      ];
+      
+      mockTopicQueryHandler.getTopicHistory.mockResolvedValueOnce(history);
+      const req = { params: { id: topicId } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicHistory(req, res);
+
+      // Assert
+      expect(mockTopicQueryHandler.getTopicHistory).toHaveBeenCalledWith(topicId);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(history);
+    });
+
+    it('should return 404 when topic is not found', async () => {
+      // Arrange
+      const topicId = 'non-existent-id';
+      const errorMessage = 'Topic not found';
+      mockTopicQueryHandler.getTopicHistory.mockRejectedValueOnce(new Error(errorMessage));
+      const req = { params: { id: topicId } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicHistory(req, res);
+
+      // Assert
+      expect(mockTopicQueryHandler.getTopicHistory).toHaveBeenCalledWith(topicId);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
+    });
+
+    it('should return 500 when an error occurs', async () => {
+      // Arrange
+      const topicId = 'topic-id';
+      const errorMessage = 'Error fetching topic history';
+      mockTopicQueryHandler.getTopicHistory.mockRejectedValueOnce(new Error(errorMessage));
+      const req = { params: { id: topicId } } as any;
+      const res = mockResponse();
+
+      // Act
+      await topicController.getTopicHistory(req, res);
+
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: errorMessage });
     });
   });
 });

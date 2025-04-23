@@ -288,6 +288,77 @@ export class TopicRoutes {
             authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.topicController.deleteTopic.bind(this.topicController)
         );
+
+        /**
+         * @swagger
+         * /api/topics/{id}/versions/{version}:
+         *   get:
+         *     summary: Get a specific version of a topic
+         *     tags: [Topics]
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         required: true
+         *         schema:
+         *           type: string
+         *       - in: path
+         *         name: version
+         *         required: true
+         *         schema:
+         *           type: integer
+         *     responses:
+         *       200:
+         *         description: Topic version retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               $ref: '#/components/schemas/TopicDTO'
+         *       400:
+         *         description: Invalid version number
+         *       404:
+         *         description: Topic or version not found
+         */
+        this.router.get(
+            '/:id/versions/:version',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.topicController.getTopicVersion.bind(this.topicController)
+        );
+
+        /**
+         * @swagger
+         * /api/topics/{id}/history:
+         *   get:
+         *     summary: Get version history of a topic
+         *     tags: [Topics]
+         *     parameters:
+         *       - in: path
+         *         name: id
+         *         required: true
+         *         schema:
+         *           type: string
+         *     responses:
+         *       200:
+         *         description: Topic history retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: array
+         *               items:
+         *                 type: object
+         *                 properties:
+         *                   version:
+         *                     type: integer
+         *                   createdAt:
+         *                     type: string
+         *                     format: date-time
+         *       404:
+         *         description: Topic not found
+         */
+        this.router.get(
+            '/:id/history',
+            authMiddleware.checkPermissions(UserRoleEnum.Viewer),
+            this.topicController.getTopicHistory.bind(this.topicController)
+        );
     }
 
     public getRouter(): Router {

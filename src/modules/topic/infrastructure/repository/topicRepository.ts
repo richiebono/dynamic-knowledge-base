@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { Topic } from '@topic/domain/entities/topic';
+import { TopicHistory } from '@topic/domain/entities/topicHistory';
 import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
 import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
 
@@ -104,6 +105,76 @@ export class TopicRepository implements ITopicRepository {
         return parseInt(result.rows[0].count, 10);
     }
 
+    async createTopicHistory(topicHistory: TopicHistory): Promise<TopicHistory> {
+        const result = await this.dbConnection.query<{ 
+            id: string; 
+            topicId: string;
+            name: string; 
+            content: string; 
+            version: number;
+            createdAt: Date;
+            parentTopicId?: string
+        }>(
+            `INSERT INTO topic_history 
+            (id, topicId, name, content, version, createdAt, parentTopicId) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7) 
+            RETURNING id, topicId, name, content, version, createdAt, parentTopicId`,
+            [
+                topicHistory.id, 
+                topicHistory.topicId, 
+                topicHistory.name, 
+                topicHistory.content, 
+                topicHistory.version, 
+                topicHistory.createdAt, 
+                topicHistory.parentTopicId
+            ]
+        );
+        return this.mapToTopicHistory(result.rows[0]);
+    }
+    
+    async getTopicHistory(topicId: string): Promise<TopicHistory[]> {
+        const result = await this.dbConnection.query<{
+            id: string;
+            topicId: string;
+            name: string;
+            content: string;
+            version: number;
+            createdAt: Date;
+            parentTopicId?: string
+        }>(
+            `SELECT id, topicId, name, content, version, createdAt, parentTopicId 
+             FROM topic_history 
+             WHERE topicId = $1 
+             ORDER BY version DESC`,
+            [topicId]
+        );
+        
+        if (!result || !result.rows) {
+            return [];
+        }
+        
+        return result.rows.map(row => this.mapToTopicHistory(row));
+    }
+    
+    async getTopicVersion(topicId: string, version: number): Promise<TopicHistory | null> {
+        const result = await this.dbConnection.query<{
+            id: string;
+            topicId: string;
+            name: string;
+            content: string;
+            version: number;
+            createdAt: Date;
+            parentTopicId?: string
+        }>(
+            `SELECT id, topicId, name, content, version, createdAt, parentTopicId 
+             FROM topic_history 
+             WHERE topicId = $1 AND version = $2`,
+            [topicId, version]
+        );
+        
+        return result.rows.length ? this.mapToTopicHistory(result.rows[0]) : null;
+    }
+
     private mapToTopic(row: { id: string; name: string; content: string; createdAt?: Date; updatedAt?: Date; version: number; parentTopicId?: string }): Topic {
         return new Topic({
             id: row.id,
@@ -113,6 +184,26 @@ export class TopicRepository implements ITopicRepository {
             updatedAt: row.updatedAt,
             version: row.version,
             parentTopicId: row.parentTopicId,
+        });
+    }
+
+    private mapToTopicHistory(row: {
+        id: string;
+        topicId: string;
+        name: string;
+        content: string;
+        version: number;
+        createdAt: Date;
+        parentTopicId?: string
+    }): TopicHistory {
+        return new TopicHistory({
+            id: row.id,
+            topicId: row.topicId,
+            name: row.name,
+            content: row.content,
+            version: row.version,
+            createdAt: row.createdAt,
+            parentTopicId: row.parentTopicId
         });
     }
 }

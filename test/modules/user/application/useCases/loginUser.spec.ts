@@ -9,7 +9,6 @@ import jwt from 'jsonwebtoken';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 import { ENV } from '@shared/infrastructure/config/env';
 
-// Mock bcrypt and jwt
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 
@@ -21,7 +20,6 @@ describe('LoginUser', () => {
     userRepository = mock<IUserRepository>();
     loginUser = new LoginUser(instance(userRepository));
     
-    // Reset mocks
     jest.resetAllMocks();
   });
   

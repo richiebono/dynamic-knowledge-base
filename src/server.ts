@@ -1,4 +1,3 @@
-// Import path setup before anything else
 import './paths';
 import 'reflect-metadata';
 import { container } from '@shared/infrastructure/ioc/container';

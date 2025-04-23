@@ -106,4 +106,41 @@ export class TopicController {
             }
         }
     }
+    
+    public async getTopicVersion(req: Request, res: Response): Promise<void> {
+        try {
+            const topicId = req.params.id;
+            const version = parseInt(req.params.version);
+            
+            if (isNaN(version) || version <= 0) {
+                res.status(400).json({ message: 'Invalid version number' });
+                return;
+            }
+            
+            const topic = await this.topicQueryHandler.getTopicVersion(topicId, version);
+            res.status(200).json(topic);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on getTopicVersion';
+            if (errorMessage.includes('not found')) {
+                res.status(404).json({ message: errorMessage });
+            } else {
+                res.status(500).json({ message: errorMessage });
+            }
+        }
+    }
+
+    public async getTopicHistory(req: Request, res: Response): Promise<void> {
+        try {
+            const topicId = req.params.id;
+            const history = await this.topicQueryHandler.getTopicHistory(topicId);
+            res.status(200).json(history);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on getTopicHistory';
+            if (errorMessage.includes('not found')) {
+                res.status(404).json({ message: errorMessage });
+            } else {
+                res.status(500).json({ message: errorMessage });
+            }
+        }
+    }
 }

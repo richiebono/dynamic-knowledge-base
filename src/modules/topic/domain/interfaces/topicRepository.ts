@@ -1,4 +1,5 @@
 import { Topic } from '@topic/domain/entities/topic';
+import { TopicHistory } from '@topic/domain/entities/topicHistory';
 
 export interface ITopicRepository {
     findSubTopics(currentId: string): Promise<Topic[]>;
@@ -11,4 +12,7 @@ export interface ITopicRepository {
     findVersionById(id: string, version: number): Promise<Topic | null>;
     getPaginatedTopics(limit: number, offset: number, orderBy: string, orderDirection: string): Promise<Topic[]>;
     getTotalTopicsCount(): Promise<number>;
+    createTopicHistory(topicHistory: TopicHistory): Promise<TopicHistory>;
+    getTopicHistory(topicId: string): Promise<TopicHistory[]>;
+    getTopicVersion(topicId: string, version: number): Promise<TopicHistory | null>;
 }

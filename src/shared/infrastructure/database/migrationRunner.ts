@@ -18,7 +18,6 @@ export class MigrationRunner {
                 );
             `);
 
-            // Para tabelas já existentes, atualizamos a constraint
             await client.query(`
                 DO $$
                 BEGIN

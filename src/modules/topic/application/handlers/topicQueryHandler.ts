@@ -6,6 +6,8 @@ import { GetTopicById } from '@topic/application/useCases/getTopicById';
 import { GetAllTopics } from '@topic/application/useCases/getAllTopics';
 import { TopicDTO } from '@topic/application/DTOs/topicDTO';
 import { GetTotalTopicsCount } from '@topic/application/useCases/getTotalTopicsCount';
+import { GetTopicVersion } from '@topic/application/useCases/getTopicVersion';
+import { GetTopicHistory } from '@topic/application/useCases/getTopicHistory';
 
 @injectable()
 export class TopicQueryHandler implements ITopicQueryHandler {
@@ -14,7 +16,9 @@ export class TopicQueryHandler implements ITopicQueryHandler {
         @inject(GetTopicTree) private getTopicTreeUseCase: GetTopicTree,
         @inject(FindShortestPath) private findShortestPathUseCase: FindShortestPath,
         @inject(GetAllTopics) private getAllTopicsUseCase: GetAllTopics,
-        @inject(GetTotalTopicsCount) private getTotalTopicsCountUseCase: GetTotalTopicsCount
+        @inject(GetTotalTopicsCount) private getTotalTopicsCountUseCase: GetTotalTopicsCount,
+        @inject(GetTopicVersion) private getTopicVersionUseCase: GetTopicVersion,
+        @inject(GetTopicHistory) private getTopicHistoryUseCase: GetTopicHistory
     ) {}
 
     async getTopicById(topicId: string): Promise<TopicDTO> {
@@ -37,4 +41,11 @@ export class TopicQueryHandler implements ITopicQueryHandler {
         return { topics, total, limit, offset };
     }
 
+    async getTopicVersion(topicId: string, version: number): Promise<TopicDTO> {
+        return await this.getTopicVersionUseCase.execute(topicId, version);
+    }
+
+    async getTopicHistory(topicId: string): Promise<{ version: number; createdAt: Date }[]> {
+        return await this.getTopicHistoryUseCase.execute(topicId);
+    }
 }

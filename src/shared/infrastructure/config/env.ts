@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Carrega o arquivo .env.docker se estiver em ambiente Docker
 const envFile = process.env.NODE_ENV === 'docker' ? '.env.docker' : '.env';
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 

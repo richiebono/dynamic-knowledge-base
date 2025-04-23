@@ -20,7 +20,6 @@ export class UserRepository implements IUserRepository {
     }
 
     async update(user: User): Promise<User> {
-        // Convert the role to lowercase to match database constraints
         const roleValue = user.role.toLowerCase();
         
         const result = await this.dbConnection.query<{ id: string; name: string; email: string; role: string; password: string; updatedAt: Date }>(

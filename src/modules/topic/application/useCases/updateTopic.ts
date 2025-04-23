@@ -1,7 +1,9 @@
 import { inject, injectable } from 'inversify';
+import { v4 as uuidv4 } from 'uuid';
 import { Topic } from '@topic/domain/entities/topic';
 import { ITopicRepository } from '@topic/domain/interfaces/topicRepository';
 import { UpdateTopicDTO } from '@topic/application/DTOs/topicDTO';
+import { TopicHistory } from '@topic/domain/entities/topicHistory';
 
 @injectable()
 export class UpdateTopic {
@@ -19,6 +21,9 @@ export class UpdateTopic {
             throw new Error('Topic not found');
         }
 
+        const topicHistory = TopicHistory.createFromTopic(uuidv4(), topic);
+        await this.topicRepository.createTopicHistory(topicHistory);
+        
         topic.update({
             name: updatedData.name,
             content: updatedData.content,

@@ -34,7 +34,6 @@ const swaggerOptions = {
         ]
     },
     apis: [
-        // Procurar documentação apenas nos arquivos de rotas
         join(__dirname, '../../../modules/**/infrastructure/routes/*.js'),
         join(__dirname, '../../../modules/**/infrastructure/routes/*.ts'),
     ],
@@ -43,13 +42,11 @@ const swaggerOptions = {
 export const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 export const setupSwagger = (app: Application) => {
-    // JSON endpoint
     app.get('/swagger.json', (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(swaggerSpec);
     });
 
-    // UI endpoint
     app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
         explorer: true,
         swaggerOptions: {

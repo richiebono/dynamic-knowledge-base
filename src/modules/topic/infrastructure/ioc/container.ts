@@ -15,6 +15,8 @@ import { GetTopicTree } from '@topic/application/useCases/getTopicTree';
 import { FindShortestPath } from '@topic/application/useCases/findShortestPath';
 import { GetAllTopics } from '@topic/application/useCases/getAllTopics';
 import { GetTotalTopicsCount } from '@topic/application/useCases/getTotalTopicsCount';
+import { GetTopicVersion } from '@topic/application/useCases/getTopicVersion';
+import { GetTopicHistory } from '@topic/application/useCases/getTopicHistory';
 import { TopicRepository } from '@topic/infrastructure/repository/topicRepository';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
@@ -39,6 +41,8 @@ const topicContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind(FindShortestPath).toSelf();
     bind(GetAllTopics).toSelf();
     bind(GetTotalTopicsCount).toSelf();
+    bind(GetTopicVersion).toSelf();
+    bind(GetTopicHistory).toSelf();
 
     // Bind handlers
     bind<ITopicCommandHandler>('ITopicCommandHandler').to(TopicCommandHandler);

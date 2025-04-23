@@ -1,4 +1,3 @@
-// Import path setup before anything else
 import './paths';
 import 'reflect-metadata';
 import express, { Application } from 'express';
@@ -30,10 +29,9 @@ export class App {
         this.initializeErrorHandling();
     }
 
-    private initializeMiddlewares() {
-        // Configure CORS to allow requests from all origins
+    private initializeMiddlewares() {        
         this.app.use(cors({
-            origin: true, // Allow all origins with credentials
+            origin: true,
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true
@@ -45,15 +43,13 @@ export class App {
     }
 
     private initializeRoutes() {
-        // Add an OPTIONS route handler for preflight requests
+        // Add an OPTIONS route handler for preflight requests, it should be add only for development, production should be handled by the reverse proxy
         this.app.options('*', cors());
         
-        // Add health check endpoint
         this.app.get('/health', (req, res) => {
             res.status(200).json({ status: 'ok' });
         });
         
-        // Add base route to redirect to swagger
         this.app.get('/', (req, res) => {
             res.redirect('/swagger');
         });

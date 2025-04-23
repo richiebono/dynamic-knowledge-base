@@ -44,7 +44,7 @@ describe('UserValidationMiddleware', () => {
       // Arrange
       const invalidBody = {
         email: 'valid@example.com',
-        password: 'password123',  // Added password field
+        password: 'password123',
         role: 'Admin'
       };
       when(req.body).thenReturn(invalidBody);

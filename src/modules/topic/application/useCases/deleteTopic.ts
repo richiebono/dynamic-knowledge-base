@@ -15,10 +15,8 @@ export class DeleteTopic {
             throw new Error(`Topic with id ${id} not found`);
         }
         
-        // First, delete all resources associated with this topic
         await this.resourceCommandHandler.deleteResourcesByTopicId(id);
         
-        // Then delete the topic itself
         await this.topicRepository.delete(id);
     }
 }

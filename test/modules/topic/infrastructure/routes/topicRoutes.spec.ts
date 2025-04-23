@@ -47,7 +47,7 @@ describe('TopicRoutes', () => {
     expect(Router).toHaveBeenCalled();
     expect(mockRouter.post).toHaveBeenCalled();
     expect(mockRouter.put).toHaveBeenCalled();
-    expect(mockRouter.get).toHaveBeenCalledTimes(4);
+    expect(mockRouter.get).toHaveBeenCalledTimes(6);
   });
   
   it('should set up POST / route with admin permissions', () => {
