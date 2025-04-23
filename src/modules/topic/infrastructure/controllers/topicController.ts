@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
 import { ITopicQueryHandler } from '@topic/application/interfaces/topicQueryHandler';
+import { CreateTopicDTO } from '@topic/application/DTOs/topicDTO';
 
 @injectable()
 export class TopicController {
@@ -18,7 +19,7 @@ export class TopicController {
 
     public async createTopic(req: Request, res: Response): Promise<void> {
         try {
-            const topicDTO = req.body;
+            const topicDTO = { ...req.body as CreateTopicDTO, createdBy: (req.user as any)?.id };
             await this.topicCommandHandler.createTopic(topicDTO);
             res.status(201).json({ message: 'Topic created successfully' });
         } catch (error) {
@@ -30,7 +31,7 @@ export class TopicController {
     public async updateTopic(req: Request, res: Response): Promise<void> {
         try {
             const topicId = req.params.id;
-            const topicDTO = req.body;
+            const topicDTO = { ...req.body, updatedBy: (req.user as any)?.id };
             await this.topicCommandHandler.updateTopic(topicId, topicDTO);
             res.status(200).json({ message: 'Topic updated successfully' });
         } catch (error) {

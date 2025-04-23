@@ -3,7 +3,7 @@ import { TopicController } from '@topic/infrastructure/controllers/topicControll
 import { ITopicCommandHandler } from '@topic/application/interfaces/topicCommandHandler';
 import { ITopicQueryHandler } from '@topic/application/interfaces/topicQueryHandler';
 import { Request, Response } from 'express';
-import { TopicDTO, CreateTopicDTO, UpdateTopicDTO } from '@topic/application/DTOs/topicDTO';
+import { TopicDTO, CreateTopicDTO, UpdateTopicDTO, CreatedTopicRequestDTO, UpdateTopicRequestDTO } from '@topic/application/DTOs/topicDTO';
 
 const mockTopicCommandHandler: jest.Mocked<ITopicCommandHandler> = {
   createTopic: jest.fn(),
@@ -37,20 +37,20 @@ describe('TopicController', () => {
   describe('createTopic', () => {
     it('should return 201 when topic is created successfully', async () => {
       // Arrange
-      const createTopicDTO: CreateTopicDTO = {
+      const createTopicDTO: CreatedTopicRequestDTO = {
         name: 'New Topic',
         content: 'New Topic Content',
-        createdBy: 'user-id',
         parentTopicId: 'parent-id',
       };
-      const req = { body: createTopicDTO } as Request;
+      const userId = 'user-id-123';
+      const req = { body: createTopicDTO, user: { id: userId } } as any;
       const res = mockResponse();
 
       // Act
       await topicController.createTopic(req, res);
 
       // Assert
-      expect(mockTopicCommandHandler.createTopic).toHaveBeenCalledWith(createTopicDTO);
+      expect(mockTopicCommandHandler.createTopic).toHaveBeenCalledWith({ ...createTopicDTO, createdBy: userId });
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({ message: 'Topic created successfully' });
     });
@@ -75,10 +75,9 @@ describe('TopicController', () => {
     it('should return 200 when topic is updated successfully', async () => {
       // Arrange
       const topicId = 'topic-id';
-      const updateTopicDTO: UpdateTopicDTO = {
+      const updateTopicDTO: UpdateTopicRequestDTO = {
         name: 'Updated Topic',
         content: 'Updated Content',
-        updatedBy: 'user-id',
       };
       const req = { 
         params: { id: topicId },

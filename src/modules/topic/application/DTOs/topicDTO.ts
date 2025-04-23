@@ -16,10 +16,23 @@ export interface CreateTopicDTO {
     parentTopicId?: string | undefined;
 }
 
+export interface CreatedTopicRequestDTO {
+    name: string;
+    content: string;
+    parentTopicId?: string | undefined;
+}
+
 export interface UpdateTopicDTO {
     id?: string;
     name?: string;
     content?: string;
     updatedBy: string;
+    parentTopicId?: string | undefined;
+}
+
+export interface UpdateTopicRequestDTO {
+    id?: string;
+    name?: string;
+    content?: string;
     parentTopicId?: string | undefined;
 }
