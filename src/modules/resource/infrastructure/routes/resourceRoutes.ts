@@ -20,7 +20,38 @@ export class ResourceRoutes {
     private initializeRoutes() {
         const authMiddleware = new AuthMiddleware();
 
-       
+        /**
+         * @swagger
+         * /resources:
+         *   post:
+         *     summary: Create a new resource
+         *     tags: [Resources]
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             required:
+         *               - topicId
+         *               - url
+         *               - description
+         *               - type
+         *             properties:
+         *               topicId:
+         *                 type: string
+         *               url:
+         *                 type: string
+         *               description:
+         *                 type: string
+         *               type:
+         *                 type: string
+         *     responses:
+         *       201:
+         *         description: Resource created successfully
+         *       400:
+         *         description: Invalid input
+         */
         this.router.post(
             '/',
             authMiddleware.checkPermissions(UserRoleEnum.Admin), 
@@ -47,13 +78,19 @@ export class ResourceRoutes {
          *           schema:
          *             type: object
          *             properties:
-         *               name:
+         *               url:
          *                 type: string
-         *               topicId:
+         *               description:
+         *                 type: string
+         *               type:
          *                 type: string
          *     responses:
          *       200:
          *         description: Resource updated successfully
+         *       400:
+         *         description: Invalid input
+         *       404:
+         *         description: Resource not found
          */
         this.router.put(
             '/:id',
@@ -77,6 +114,30 @@ export class ResourceRoutes {
          *     responses:
          *       200:
          *         description: Resource retrieved successfully
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 id:
+         *                   type: string
+         *                 topicId:
+         *                   type: string
+         *                 url:
+         *                   type: string
+         *                 description:
+         *                   type: string
+         *                 type:
+         *                   type: string
+         *                 createdAt:
+         *                   type: string
+         *                   format: date-time
+         *                 updatedAt:
+         *                   type: string
+         *                   format: date-time
+         *                   nullable: true
+         *       404:
+         *         description: Resource not found
          */
         this.router.get(
             '/:id',
@@ -99,6 +160,30 @@ export class ResourceRoutes {
          *     responses:
          *       200:
          *         description: List of resources for the topic
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: array
+         *               items:
+         *                 type: object
+         *                 properties:
+         *                   id:
+         *                     type: string
+         *                   topicId:
+         *                     type: string
+         *                   url:
+         *                     type: string
+         *                   description:
+         *                     type: string
+         *                   type:
+         *                     type: string
+         *                   createdAt:
+         *                     type: string
+         *                     format: date-time
+         *                   updatedAt:
+         *                     type: string
+         *                     format: date-time
+         *                     nullable: true
          */
         this.router.get(
             '/topic/:topicId',
@@ -127,7 +212,7 @@ export class ResourceRoutes {
          *         name: orderBy
          *         schema:
          *           type: string
-         *         description: Field to order by (e.g., name, createdAt)
+         *         description: Field to order by (e.g., url, createdAt)
          *       - in: query
          *         name: orderDirection
          *         schema:
@@ -137,6 +222,39 @@ export class ResourceRoutes {
          *     responses:
          *       200:
          *         description: List of resources
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 resources:
+         *                   type: array
+         *                   items:
+         *                     type: object
+         *                     properties:
+         *                       id:
+         *                         type: string
+         *                       topicId:
+         *                         type: string
+         *                       url:
+         *                         type: string
+         *                       description:
+         *                         type: string
+         *                       type:
+         *                         type: string
+         *                       createdAt:
+         *                         type: string
+         *                         format: date-time
+         *                       updatedAt:
+         *                         type: string
+         *                         format: date-time
+         *                         nullable: true
+         *                 total:
+         *                   type: integer
+         *                 limit:
+         *                   type: integer
+         *                 offset:
+         *                   type: integer
          */
         this.router.get(
             '/',
@@ -159,6 +277,8 @@ export class ResourceRoutes {
          *     responses:
          *       200:
          *         description: Resource deleted successfully
+         *       404:
+         *         description: Resource not found
          */
         this.router.delete(
             '/:id',
