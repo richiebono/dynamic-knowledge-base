@@ -193,18 +193,18 @@ You can run the entire application (backend and database) using Docker Compose, 
 
 2. Build the Docker images:
    ```bash
-   docker-compose -f infra/docker/docker-compose.yml build
+   docker compose -f infra/docker/docker-compose.yml build
    ```
 
 3. Start the containers:
    ```bash
-   docker-compose -f infra/docker/docker-compose.yml up -d
+   docker compose -f infra/docker/docker-compose.yml up -d
    ```
    This will start the backend and PostgreSQL database in containers.
 
 4. (Optional) Run database migrations:
    ```bash
-   docker-compose -f infra/docker/docker-compose.yml exec backend bash -c "cd infra/scripts && ./migrate.sh"
+   docker compose -f infra/docker/docker-compose.yml exec backend bash -c "cd infra/scripts && ./migrate.sh"
    ```
 
 5. Access the API at:
