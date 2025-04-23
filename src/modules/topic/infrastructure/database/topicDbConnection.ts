@@ -6,7 +6,7 @@ export class TopicDbConnection extends DbConnection {
     }
 
     public static initializeInstance(): void {
-        if (!DbConnection.getInstance()) {
+        if (!DbConnection.isInitialized()) {
             DbConnection.initialize(new TopicDbConnection());
         }
     }

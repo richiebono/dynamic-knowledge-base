@@ -13,9 +13,12 @@ import { DeleteTopic } from '@topic/application/useCases/deleteTopic';
 import { GetTopicById } from '@topic/application/useCases/getTopicById';
 import { GetTopicTree } from '@topic/application/useCases/getTopicTree';
 import { FindShortestPath } from '@topic/application/useCases/findShortestPath';
+import { GetAllTopics } from '@topic/application/useCases/getAllTopics';
+import { GetTotalTopicsCount } from '@topic/application/useCases/getTotalTopicsCount';
 import { TopicRepository } from '@topic/infrastructure/repository/topicRepository';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
+import { TopicValidationMiddleware } from '@topic/infrastructure/middleware/topicValidation';
 
 const topicContainer = new ContainerModule((bind: interfaces.Bind) => {
     // Use TopicDbConnection for the topic module
@@ -34,6 +37,8 @@ const topicContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind(GetTopicById).toSelf();
     bind(GetTopicTree).toSelf();
     bind(FindShortestPath).toSelf();
+    bind(GetAllTopics).toSelf();
+    bind(GetTotalTopicsCount).toSelf();
 
     // Bind handlers
     bind<ITopicCommandHandler>('ITopicCommandHandler').to(TopicCommandHandler);
@@ -44,6 +49,9 @@ const topicContainer = new ContainerModule((bind: interfaces.Bind) => {
 
     // Bind routes
     bind(TopicRoutes).toSelf();
+
+    // Bind middleware
+    bind(TopicValidationMiddleware).toSelf();
 });
 
 export { topicContainer };

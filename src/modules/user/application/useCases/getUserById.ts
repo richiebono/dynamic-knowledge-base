@@ -5,7 +5,7 @@ import { User } from '@user/domain/entities/user';
 
 @injectable()
 export class GetUserById {
-    constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
+    constructor(@inject('IUserRepository') private userRepository: IUserRepository) {}
 
     public async execute(userId: string): Promise<UserDTO | null> {
         const user: User | null = await this.userRepository.findById(userId);

@@ -3,14 +3,15 @@ import { TopicController } from '@topic/infrastructure/controllers/topicControll
 import { TopicValidationMiddleware } from '@topic/infrastructure/middleware/topicValidation';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
+import { inject, injectable } from 'inversify';
 
-
+@injectable()
 export class TopicRoutes {
     private router: Router;
 
     constructor(
-        private topicController: TopicController,
-        private topicValidationMiddleware: TopicValidationMiddleware
+        @inject(TopicController) private topicController: TopicController,
+        @inject(TopicValidationMiddleware) private topicValidationMiddleware: TopicValidationMiddleware
     ) {
         this.router = Router();
         this.initializeRoutes();

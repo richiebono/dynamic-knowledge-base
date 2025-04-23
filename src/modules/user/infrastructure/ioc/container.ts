@@ -11,6 +11,8 @@ import { UpdateUser } from '@user/application/useCases/updateUser';
 import { DeleteUser } from '@user/application/useCases/deleteUser';
 import { GetUserById } from '@user/application/useCases/getUserById';
 import { GetAllUsers } from '@user/application/useCases/getAllUsers';
+import { GetTotalUsersCount } from '@user/application/useCases/getTotalUsersCount';
+import { LoginUser } from '@user/application/useCases/loginUser';
 import { UserController } from '@user/infrastructure/controllers/userController';
 import { UserValidationMiddleware } from '@user/infrastructure/middleware/userValidation';
 import { UserRepository } from '@user/infrastructure/repository/userRepository';
@@ -34,6 +36,8 @@ const userContainer = new ContainerModule((bind: interfaces.Bind, unbind: interf
     bind(DeleteUser).toSelf();
     bind(GetUserById).toSelf();
     bind(GetAllUsers).toSelf();
+    bind(GetTotalUsersCount).toSelf();
+    bind(LoginUser).toSelf();
 
     // Bind handlers
     bind<IUserCommandHandler>('IUserCommandHandler').to(UserCommandHandler);

@@ -20,27 +20,7 @@ export class ResourceRoutes {
     private initializeRoutes() {
         const authMiddleware = new AuthMiddleware();
 
-        /**
-         * @swagger
-         * /resources:
-         *   post:
-         *     summary: Create a new resource
-         *     tags: [Resources]
-         *     requestBody:
-         *       required: true
-         *       content:
-         *         application/json:
-         *           schema:
-         *             type: object
-         *             properties:
-         *               name:
-         *                 type: string
-         *               topicId:
-         *                 type: string
-         *     responses:
-         *       201:
-         *         description: Resource created successfully
-         */
+       
         this.router.post(
             '/',
             authMiddleware.checkPermissions(UserRoleEnum.Admin), 

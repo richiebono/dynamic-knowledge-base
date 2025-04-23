@@ -19,7 +19,9 @@
       "@shared/*": ["shared/*"],
     },
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": false,
+    "preserveConstEnums": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]

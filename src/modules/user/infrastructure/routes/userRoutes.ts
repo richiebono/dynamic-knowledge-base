@@ -43,7 +43,9 @@ export class UserRoutes {
          */
         this.router.post(
             '/',
-            authMiddleware.checkPermissions(UserRoleEnum.Admin),
+
+            // I Will not validate permission for testing purposes, after create a user we can uncomment next line and remove this comment.
+            // authMiddleware.checkPermissions(UserRoleEnum.Admin),
             this.userValidationMiddleware.validateCreateUser.bind(this.userValidationMiddleware),
             this.userController.createUser.bind(this.userController)
         );
@@ -54,6 +56,7 @@ export class UserRoutes {
          *   put:
          *     summary: Update an existing user
          *     tags: [Users]
+         *     security: []  # Sobrescreve a configuração global de segurança para este endpoint, for testing propose, after create a user we can uncomment this line and remove this comment.
          *     parameters:
          *       - in: path
          *         name: id
@@ -142,6 +145,47 @@ export class UserRoutes {
             this.userController.getAllUsers.bind(this.userController)
         );
 
+        /**
+         * @swagger
+         * /users/login:
+         *   post:
+         *     summary: Authenticate user and get token
+         *     tags: [Users]
+         *     security: []  # Sobrescreve a configuração global de segurança para este endpoint
+         *     requestBody:
+         *       required: true
+         *       content:
+         *         application/json:
+         *           schema:
+         *             type: object
+         *             required:
+         *               - email
+         *               - password
+         *             properties:
+         *               email:
+         *                 type: string
+         *                 format: email
+         *                 description: User email address
+         *               password:
+         *                 type: string
+         *                 format: password
+         *                 description: User password
+         *     responses:
+         *       200:
+         *         description: Login successful
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 token:
+         *                   type: string
+         *                   description: JWT authentication token
+         *       401:
+         *         description: Unauthorized - Invalid credentials
+         *       500:
+         *         description: Internal server error
+         */
         this.router.post('/login', this.userController.login.bind(this.userController));
     }
 

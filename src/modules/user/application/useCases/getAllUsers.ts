@@ -5,7 +5,7 @@ import { User } from '@user/domain/entities/user';
 
 @injectable()
 export class GetAllUsers {
-    constructor(@inject('UserRepository') private userRepository: IUserRepository) {}
+    constructor(@inject('IUserRepository') private userRepository: IUserRepository) {}
 
     public async execute(limit: number, offset: number, orderBy: string, orderDirection: 'ASC' | 'DESC'): Promise<UserDTO[]> {
         const users: User[] = await this.userRepository.findAll(limit, offset, orderBy, orderDirection);

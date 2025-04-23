@@ -2,43 +2,26 @@ import 'reflect-metadata';
 import { TopicDbConnection } from '@topic/infrastructure/database/topicDbConnection';
 import { DbConnection } from '@shared/infrastructure/database/dbConnection';
 
-
-jest.mock('@shared/infrastructure/database/dbConnection', () => {
-  return {
-    DbConnection: class {
-      static getInstance = jest.fn();
-      static initialize = jest.fn();
-    }
-  };
-});
+jest.spyOn(DbConnection, 'isInitialized').mockReturnValue(false);
+jest.spyOn(DbConnection, 'initialize').mockImplementation(jest.fn());
 
 describe('TopicDbConnection', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('should initialize a new instance when none exists', () => {
-    // Arrange
-    (DbConnection.getInstance as jest.Mock).mockReturnValue(null);
-    
-    // Act
+  it('should call initialize on DbConnection when initializeInstance is called and no instance exists', () => {
+    (DbConnection.isInitialized as jest.Mock).mockReturnValue(false);
     TopicDbConnection.initializeInstance();
-    
-    // Assert
-    expect(DbConnection.initialize).toHaveBeenCalled();
-    const initializeArg = (DbConnection.initialize as jest.Mock).mock.calls[0][0];
-    expect(initializeArg).toBeInstanceOf(TopicDbConnection);
+    expect(DbConnection.isInitialized).toHaveBeenCalled();
+    expect(DbConnection.initialize).toHaveBeenCalledTimes(1);
+    expect(DbConnection.initialize).toHaveBeenCalledWith(expect.any(TopicDbConnection));
   });
 
-  it('should not initialize a new instance when one already exists', () => {
-    // Arrange
-    const mockInstance = {};
-    (DbConnection.getInstance as jest.Mock).mockReturnValue(mockInstance);
-    
-    // Act
+  it('should not call initialize on DbConnection when initializeInstance is called and an instance already exists', () => {
+    (DbConnection.isInitialized as jest.Mock).mockReturnValue(true);
     TopicDbConnection.initializeInstance();
-    
-    // Assert
+    expect(DbConnection.isInitialized).toHaveBeenCalled();
     expect(DbConnection.initialize).not.toHaveBeenCalled();
   });
 });

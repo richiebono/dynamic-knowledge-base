@@ -6,7 +6,7 @@ export class UserDbConnection extends DbConnection {
     }
 
     public static initializeInstance(): void {
-        if (!DbConnection.getInstance()) {
+        if (!DbConnection.isInitialized()) {
             DbConnection.initialize(new UserDbConnection());
         }
     }

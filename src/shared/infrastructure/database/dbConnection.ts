@@ -30,6 +30,10 @@ export abstract class DbConnection {
         }
     }
 
+    public static isInitialized(): boolean {
+        return !!this.instance;
+    }
+
     public async query<T extends QueryResultRow>(text: string, params?: any[]): Promise<QueryResult<T>> {
         return this.pool.query<T>(text, params);
     }
