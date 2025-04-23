@@ -7,6 +7,7 @@ import { mock, instance, verify, when } from 'ts-mockito';
 import { AuthMiddleware } from '@shared/infrastructure/middleware/authMiddleware';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
+// Define the mock router as an object with the necessary methods
 const mockRouter = {
   get: jest.fn().mockReturnThis(),
   post: jest.fn().mockReturnThis(),
@@ -14,8 +15,12 @@ const mockRouter = {
   delete: jest.fn().mockReturnThis()
 };
 
+// Ensure we always use the same router instance
+const routerInstance = mockRouter;
+
+// Mock Express Router to return our mock router
 jest.mock('express', () => ({
-  Router: jest.fn(() => mockRouter)
+  Router: jest.fn(() => routerInstance)
 }));
 
 const mockCheckPermissions = jest.fn(() => jest.fn());
@@ -77,6 +82,6 @@ describe('TopicRoutes', () => {
     const router = topicRoutes.getRouter();
     
     // Assert
-    expect(router).toBe(mockRouter);
+    expect(router).toBe(routerInstance);
   });
 });

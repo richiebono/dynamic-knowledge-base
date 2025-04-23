@@ -84,8 +84,8 @@ export class UserController {
     public async login(req: Request, res: Response): Promise<void> {
         try {
             const loginDTO: LoginDTO = req.body;
-            const token = await this.userCommandHandler.loginUser(loginDTO);
-            res.status(200).json({ token });
+            const { token, userId } = await this.userCommandHandler.loginUser(loginDTO);
+            res.status(200).json({ token, userId });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred on login';
             res.status(401).json({ message: errorMessage });

@@ -164,14 +164,18 @@ describe('UserController', () => {
     });
 
     describe('login', () => {
-        it('should login and return token', async () => {
-            mockUserCommandHandler.loginUser.mockResolvedValueOnce('token123');
+        it('should login and return token and userId', async () => {
+            const loginResponse = {
+                token: 'token123',
+                userId: 'user-id-123'
+            };
+            mockUserCommandHandler.loginUser.mockResolvedValueOnce(loginResponse);
             const req = { body: { email: 'a', password: 'b' } } as any;
             const res = mockResponse();
             await controller.login(req, res);
             expect(mockUserCommandHandler.loginUser).toHaveBeenCalledWith({ email: 'a', password: 'b' });
             expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith({ token: 'token123' });
+            expect(res.json).toHaveBeenCalledWith(loginResponse);
         });
 
         it('should handle errors and return 401', async () => {

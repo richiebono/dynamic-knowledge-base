@@ -10,7 +10,7 @@ import { LoginDTO } from '@user/application/DTOs/userDTO';
 export class LoginUser {
     constructor(@inject('IUserRepository') private userRepository: IUserRepository) {}
 
-    async execute(login: LoginDTO): Promise<string> {
+    async execute(login: LoginDTO): Promise<{ token: string, userId: string }> {
         const user = await this.userRepository.findByEmail(login.email);
         if (!user) {
             throw new Error('Invalid email or password');
@@ -22,6 +22,6 @@ export class LoginUser {
         }
 
         const token = jwt.sign({ id: user.id, role: user.role }, ENV.JWT.SECRET as string, { expiresIn: ENV.JWT.EXPIRES_IN });
-        return token;
+        return { token, userId: user.id };
     }
 }

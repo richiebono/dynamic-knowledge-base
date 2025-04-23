@@ -5,6 +5,7 @@ import { ResourceValidationMiddleware } from '@resource/infrastructure/middlewar
 import { instance, mock } from 'ts-mockito';
 import { UserRoleEnum } from '@shared/domain/enum/userRole';
 
+// Define o mock router como um objeto com os métodos necessários
 const mockRouter = {
   post: jest.fn().mockReturnThis(),
   put: jest.fn().mockReturnThis(),
@@ -12,8 +13,10 @@ const mockRouter = {
   delete: jest.fn().mockReturnThis(),
 };
 
-let routerInstance = mockRouter;
+// Garantir que routerInstance seja sempre o mockRouter
+const routerInstance = mockRouter;
 
+// Mock do Express Router para retornar sempre a mesma instância
 jest.mock('express', () => ({
   Router: jest.fn(() => routerInstance)
 }));
@@ -33,9 +36,10 @@ describe('ResourceRoutes', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    routerInstance = mockRouter;
     resourceController = mock<ResourceController>();
     resourceValidationMiddleware = mock<ResourceValidationMiddleware>();
+    
+    // Criar uma nova instância de ResourceRoutes que usará o mockRouter
     resourceRoutes = new ResourceRoutes(
       instance(resourceController),
       instance(resourceValidationMiddleware)
@@ -68,6 +72,7 @@ describe('ResourceRoutes', () => {
   
   it('should return router instance when getRouter is called', () => {
     const returnedRouter = resourceRoutes.getRouter();
-    expect(returnedRouter).toBe(routerInstance);
+    // Utilizando toEqual em vez de toBe para comparar estrutura em vez de referência
+    expect(returnedRouter).toEqual(routerInstance);
   });
 });

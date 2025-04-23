@@ -27,7 +27,7 @@ export class UserCommandHandler implements IUserCommandHandler {
         await this.deleteUserUseCase.execute(id);
     }
 
-    async loginUser(login: LoginDTO): Promise<string> {
+    async loginUser(login: LoginDTO): Promise<{ token: string, userId: string }> {
         return await this.loginUserUseCase.execute(login);
     }
 }

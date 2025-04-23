@@ -82,22 +82,25 @@ describe('UserCommandHandler', () => {
   });
   
   describe('loginUser', () => {
-    it('should delegate to loginUserUseCase and return token', async () => {
+    it('should delegate to loginUserUseCase and return token and userId', async () => {
       // Arrange
       const loginDTO: LoginDTO = {
         email: 'user@example.com',
         password: 'password123'
       };
       
-      const expectedToken = 'jwt-token';
-      when(loginUser.execute(loginDTO)).thenResolve(expectedToken);
+      const expectedResponse = {
+        token: 'jwt-token',
+        userId: 'user-id-123'
+      };
+      when(loginUser.execute(loginDTO)).thenResolve(expectedResponse);
       
       // Act
       const result = await userCommandHandler.loginUser(loginDTO);
       
       // Assert
       verify(loginUser.execute(loginDTO)).once();
-      expect(result).toBe(expectedToken);
+      expect(result).toEqual(expectedResponse);
     });
   });
 });

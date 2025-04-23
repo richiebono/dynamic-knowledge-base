@@ -48,6 +48,9 @@ describe('User API Endpoints', () => {
         .expect(200);
         
       expect(loginResponse.body).toHaveProperty('token');
+
+      
+      
     });
     
     it('should return 401 with invalid credentials', async () => {
@@ -114,6 +117,14 @@ describe('User API Endpoints', () => {
           .expect(200);
           
         expect(response.body).toHaveProperty('id', userId);
+        
+        await testHelper.getRequest()
+          .delete(`/api/users/${userId}`)
+          .set('Authorization', `Bearer ${token}`)
+          .expect(204);
+          
+        console.log('User deleted successfully');
+
       } else {
         // Skip this test if no users found
         console.warn('No users found to test GET /api/users/:id endpoint');

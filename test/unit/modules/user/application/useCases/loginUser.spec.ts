@@ -66,7 +66,7 @@ describe('LoginUser', () => {
     expect(bcrypt.compare).toHaveBeenCalledWith(loginDTO.password, user.password);
   });
   
-  it('should return a token when login is successful', async () => {
+  it('should return a token and userId when login is successful', async () => {
     // Arrange
     const loginDTO: LoginDTO = {
       email: 'user@example.com',
@@ -99,6 +99,9 @@ describe('LoginUser', () => {
       ENV.JWT.SECRET,
       { expiresIn: ENV.JWT.EXPIRES_IN }
     );
-    expect(result).toBe(mockedToken);
+    expect(result).toEqual({
+      token: mockedToken,
+      userId: user.id
+    });
   });
 });
