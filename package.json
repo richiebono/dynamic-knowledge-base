@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc -p tsconfig.build.json",
-    "migrate": "sh infra/scripts/migrate.sh",
+    "migrate": "docker compose -f infra/docker/docker-compose.yml exec app bash -c 'cd infra/scripts && ./migrate.sh'",
     "test": "jest",
     "start:dev": "ts-node src/server.ts",
     "scripts:chmod": "chmod +x infra/scripts/*.sh"

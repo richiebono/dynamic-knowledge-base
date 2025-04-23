@@ -81,7 +81,7 @@ knowledge-base-backend
    ./migrate.sh
    ```
 
-### Running the Application
+### Running the Application if you have a PostgreSQL instance running locally
 1. Start the server in development mode:
    ```bash
    npm run start:dev
@@ -221,7 +221,7 @@ You can run the entire application (backend and database) using Docker Compose, 
 
 4. (Optional) Run database migrations:
    ```bash
-   docker compose -f infra/docker/docker-compose.yml exec backend bash -c "cd infra/scripts && ./migrate.sh"
+   docker compose -f infra/docker/docker-compose.yml exec app bash -c "cd infra/scripts && ./migrate.sh"
    ```
 
 5. Access the API at:

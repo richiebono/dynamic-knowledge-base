@@ -17,6 +17,7 @@ RUN npm install -g tsc-alias
 
 # Copy source code
 COPY ../../ ./
+COPY ../../infra ./infra
 
 # Build the application (tsc + tsc-alias via postbuild script)
 RUN npm run build
@@ -41,6 +42,9 @@ COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy .env file
 COPY ../../.env ./
+COPY ../../infra ./infra
+
+RUN chmod -R +x ./infra/scripts
 
 EXPOSE 8080
 
